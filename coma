@@ -1,0 +1,11 @@
+#!/bin/bash
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+awk 'NR >= 98 && NR <= 113 {
+		gsub (/alias/, "\033[1;36malias\033[0m");
+		gsub (/pacman/, "\033[1;34mpacman\033[0m");
+		gsub (/-color/, "\033[1;32m-color\033[0m");
+		gsub (/grep/, "\033[0,31mgrep\033[0m");
+		gsub (/makepkg/, "\033[0;36mmakepkg\033[0m");
+		print }' $HOME/.bashrc
+exit

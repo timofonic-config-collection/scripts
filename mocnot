@@ -1,0 +1,3 @@
+#!/bin/bash
+notify-send -u low "[MOC] $1 - $2"
+exit

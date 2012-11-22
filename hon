@@ -1,0 +1,7 @@
+#!/bin/bash
+#Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+#LD_LIBRARY_PATH=$HOME/.bin/lib $HOME/.HoN/hon-x86_64
+#LD_PRELOAD=$HOME/.bin/lib/libXss.so.1 $HOME/.HoN/hon-x86_64
+$HOME/.HoN/hon-x86_64
+exit

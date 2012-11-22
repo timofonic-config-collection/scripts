@@ -1,0 +1,30 @@
+#!/bin/bash
+#Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+DEF="\e[0m"
+RED="\e[0;31m"
+GREEN="\e[0;32m"
+CYAN="\e[0;36m"
+
+if [ -z "$(find -type f -iname 'Thumbs.db')" ]
+	then echo -e "$GREEN""No Thumbs.db file has been detected""$DEF"
+else 
+	find -iname "Thumbs.db" -print0 | xargs -0 rm
+	echo -e "$RED""All Thumbs.db files found have been successfully deleted""$DEF"
+fi
+
+if [ -z "$(find -type f -iname 'desktop.ini*')" ]
+	then echo -e "$GREEN""No desktop.ini file has been detected""$DEF"
+else 
+	find -iname "desktop.ini*" -print0 | xargs -0 rm
+	echo -e "$RED""All desktop.ini files found have been successfully deleted""$DEF"
+fi
+
+if [ -z "$(find -type f -iname '.directory')" ]
+	then echo -e "$GREEN""No .directory file has been detected""$DEF"
+else 
+	find -iname ".directory*" -print0 | xargs -0 rm
+	echo -e "$RED""All .directory files found have been successfully deleted""$DEF"
+fi
+echo -e "$CYAN""Done""$DEF"
+exit

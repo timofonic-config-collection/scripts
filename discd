@@ -1,0 +1,10 @@
+#!/bin/bash
+#Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+DATE=$(date '+%A %d %B')
+TIME=$(date '+%R')
+PCC=$(/usr/sbin/smartctl -A /dev/sda | grep -i 'Load_Cycle_Count')
+
+echo -e "--> $DATE | $TIME <--"
+echo -e "$PCC\n"
+exit

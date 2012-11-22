@@ -1,0 +1,11 @@
+#!/bin/sh
+cd bin
+ARCH=$(uname -m)
+if [ "$ARCH" = x86 ]; then
+./launcher_x86 -config ../data/launcher/launcher.xml
+elif [ "$ARCH" = x86_64 ]; then
+./launcher_x64 -config ../data/launcher/launcher.xml
+else
+echo "The architecture is unknown. Heaven Benchmark is compatible with x86 / x86_64."
+echo "The program will now close."
+fi

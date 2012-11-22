@@ -1,0 +1,30 @@
+#!/bin/bash
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+DEF="\e[0m"
+RED="\e[0;31m"
+GREEN="\e[0;32m"
+
+if [ -n "$DISPLAY" ]; then
+	echo -e "You must close "$RED"XServer"$DEF" before launching this "$GREEN"command"$DEF"!"
+	exit
+fi
+
+display_usage() { 
+	echo -e "\nUsage: ${0##*/} ["$GREEN"arguments"$DEF"]"
+	echo -e "\n   Arguments:"
+	echo -e "     -d 			Shutdown the computer"
+	echo -e "     -r 			Reboot the computer\n"
+	}
+
+if [[ -z "$1" || "$1" = -h ]]; then
+	display_usage
+	exit
+fi 
+
+case "$1" in
+    -d) sudo shutdown -h now ;;
+    -r) sudo shutdown -r now ;;
+    ?) display_usage ;;
+esac
+

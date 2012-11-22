@@ -1,0 +1,164 @@
+#!/bin/bash
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#
+#Moc Controller which provides info & control under Openbox
+#Author: Ypnose
+#You can contact me on website - Visit: http://tetedulinuxien.fr
+#Version: 1.13
+#This script will work much better with good id3tags
+#Thanks to Nic0 for some tips
+
+##############################################
+#
+#	THE SCRIPT WILL BE TOTALLY REWORK BECAUSE MOCP 2.5.0 IS RELEASED. SOME COMMANDS ARE MORE SIMPLE
+#	YOU CAN USE THIS SCRIPT FOR MOC < 2.5.0
+#
+##############################################
+
+#Changelog
+#1.00: Mocinfo is over.
+#1.01: Fixed a bug with & character.
+#1.02: Added "Bitrate" section.
+#1.03: Added some changes if the files played is .wav.
+#1.04: Added changes in "Bitrate" when the music is paused or stopped.
+#1.05: Changed Bitrate.
+#1.06: Changed the command. The previous one was functional but it could be broken if the file had bad id3tags.
+#1.07: Automatically detect file extension and shows a message (MP3, OGG or WAV).
+#1.08: Cleaned the entire code.
+#1.09: Added a new code for menu "Controls".
+#1.10: Webradio support. In "Type", it shows "NET" when you're listening to web stream instead of blank line.
+#1.11: Added "Time" part.
+#1.12: Moved to NEWmocinfo. This script is still good for moc 2.4.4 and before.
+#1.13: Fixed some issues after feedback from users.
+
+#HOWTOINSTALL
+#Edit your menu.xml and add this line:
+#<menu execute="/home/foo/.mocinfo.sh" id="pipe-music" label="MocInfo"/> (Replace foo with your username)
+#Make it executable. You can rename .mocinfo to mocinfo or whatever you want.
+#Change the location, if you don't want to place the script under your /home
+
+if [ -z "$(pidof mocp)" ]; then
+	ZIK=$(echo "Moc is not running") #If Moc is not started, it shows a message.
+else
+    if [ -z "$(mocp -i | grep File)" ]; then
+        ZIK=$(echo "Not Playing Music") #If you're not listening to music, it shows a message
+    else
+		MOC1=$(mocp -i | grep State | awk {'print $2'})
+        if [ $MOC1 = PAUSE ]; then
+            ZIK=$(echo "Paused Music") #If you paused the music, it shows a message
+        else
+            if [ -z "$(mocp -i | grep SongTitle | sed -e 's/^.*: //')" ]; then
+			MOC3=$(mocp -i | grep File | sed 's/.*\.//')
+			ZIK=$(echo "Your file is .$MOC3 and has no title") #Wave files has not id3tags (and title), it shows a message 
+            else
+			MOC3=$(mocp -i | grep File | sed 's/.*\.//')
+			ZIK=$(mocp -i | grep Title | sed -e 's/&/&amp;/' -e 's/Title: //' -e '/^Song/d') #old: grep SongTitle | sed -e 's/&/&amp;/' -e 's/SongTitle: //'
+            fi
+        fi
+    fi
+fi
+
+echo "<openbox_pipe_menu>"
+echo '<separator label="Track" />'
+    echo "<item label=\"$ZIK\" />"
+if [ -z "$(pidof mocp)" ]; then #If Moc is not running and Not Playing Music, you won't see Controls menu. =)
+    echo "</openbox_pipe_menu>"
+else
+
+MES=$(echo '--')
+MOC2=$(mocp -i | grep Bitrate | awk {'print $2'})
+MOC4=$(mocp -i | grep File | sed -e 's/^.*: //' -e 's/:.*//')
+MOC5=$(mocp -i | grep CurrentTime | awk {'print $2'})
+MOC6=$(mocp -i | grep TotalTime | awk {'print $2'})
+#############
+#Time part
+if [ -z "$MOC6" ]; then #When there's no "TotalTime" (webradio for example)
+MOC6=$MES
+fi
+
+if [ -z "$(mocp -i | grep File)" ]; then #When Moc is stopped
+TIME=$MES
+else
+TIME=$MOC5/$MOC6
+fi
+
+echo '<separator label="Time" />'
+echo "<item label=\"$TIME\" />"
+#############
+
+#############
+#File extension detection part
+if [ -z "$(mocp -i | grep File)" ]; then
+EXT=$MES
+elif [ $MOC1 = PAUSE ]; then
+EXT=$MES
+else
+if [ $MOC3 = 'mp3' ]; then
+EXT=$(echo 'MP3')
+fi
+if [ $MOC3 = 'wav' ]; then
+EXT=$(echo 'WAV')
+fi
+if [ $MOC3 = 'ogg' ]; then
+EXT=$(echo 'OGG')
+fi
+if [ $MOC4 = 'http' ]; then
+EXT=$(echo 'NET')
+fi
+fi
+echo '<separator label="Type" />'
+echo "<item label=\"$EXT\" />"
+#############
+
+#############
+#Bitrate section. If you wanna desactivate it, comment the following lines:
+if [ -z "$(mocp -i | grep File)" ]; then
+   BIT=$(echo "--")
+else
+    if [ $MOC1 = PAUSE ]; then
+        BIT=$(echo "--") #When the music is paused, you see characters instead of "Not Supported"
+    else
+        if [ $MOC2 = 0Kbps ]; then
+            BIT=$(echo "Not Supported") #Wave files has no Bitrates So it shows a message if Bitrate are blank.
+        else
+            BIT=$MOC2
+        fi
+    fi
+fi
+echo '<separator label="Bitrate" />'
+echo "<item label=\"$BIT\" />"
+#############
+
+#############
+#Menu "Controls" (by Nic0)
+function add_item
+{
+    echo '<item label="'$1'">'
+    echo '<action name="Execute"><execute>'$2'</execute></action>'
+    echo '</item>'
+}
+
+echo '<separator label="Controls" />'
+add_item 'Play/Pause' 'mocp -G'
+add_item 'Next' 'mocp -f'
+add_item 'Previous' 'mocp -r'
+add_item 'Clear Playlist' 'mocp -c'
+add_item 'Stop' 'mocp -s'
+add_item 'Quit' 'mocp -x'
+#############
+echo "</openbox_pipe_menu>"
+fi
+exit 0
