@@ -3,8 +3,8 @@
 # This script saves core config files for Archlinux in the specified folder
 # If you want to use it, you may change $DIRS and files accordingly!
 
-DIR=$HOME/Documents
-#DIR=/media/USB
+#DIR=$HOME/Documents
+DIR=/media/USB1
 
 if [[ -d "$DIR" ]]; then
 	echo -e "\e[0;32mThe directory exists. It will be used for your configs.\e[0m"
@@ -41,10 +41,11 @@ NANF="/usr/share/nano/conf.nanorc /usr/share/nano/pkgbuild.nanorc"
 #User
 BASHF="$HOME/.bashrc $HOME/.bash_profile"
 MISCF="$HOME/.Xresources $HOME/.dir_colors $HOME/.gitconfig $HOME/.xinitrc $HOME/OUT.out $HOME/.config/user-dirs.conf $HOME/.config/fontconfig/fonts.conf"
-FIREF=$(find -type d -iname "*.default")
+FIREF=$(find $HOME -type d -iname "*.default")
 
 #Option: comment $OPTF if you don't need it.
-OPTF="$HOME/.bin/ $HOME/.fonts/ $HOME/.moc/themes/ $HOME/.themes/ $HOME/Builds/ $HOME/Documents/Font/ $HOME/Documents/Pics/ $HOME/Documents/bookmarks.html $HOME/Documents/Certificate_Mad.p12"
+OPTF="$HOME/.bin/ $HOME/.fonts/ $HOME/.moc/themes/ $HOME/.themes/ $HOME/Documents/Font/ $HOME/Documents/Pics/ $HOME/Documents/bookmarks.html $HOME/Documents/Certificate_Mad.p12"
+ARCF="$HOME/Builds"
 
 #Message
 echo -e "\e[0;33mThe following files will be copied\e[0m => $BOOTF $ETCF $PACF $NETF $MODF $XORGF $NANF $BASHF $MISCF"
@@ -69,11 +70,15 @@ pacman -Q >> $NEWFOL/pacman_pkgs.out
 
 #Option
 if [[ -n "$OPTF" ]]; then
-	echo -e "\e[0mOptional files will be saved!"
+	echo -e "\n\e[0mOptional files will be saved!"
 	mkdir -p $NEWFOL/OPT
 	cp -r --preserve=links $OPTF $NEWFOL/OPT
 	else
 	echo -e "\e[0mNo optional files defined!"
+fi
+
+if [[ -n "$ARCF" ]]; then
+	tar -czf $NEWFOL/Builds.tar.gz $ARCF
 fi
 
 echo -e "\n\e[0mYou saved $(ls -A $NEWFOL | wc -l) files"
