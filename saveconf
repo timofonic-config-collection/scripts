@@ -3,8 +3,9 @@
 # This script saves core config files for Archlinux in the specified folder
 # If you want to use it, you may change $DIRS and files accordingly!
 
-#DIR=$HOME/Documents
-DIR=/media/USB1
+TARGZ=no
+DIR=$HOME/Documents
+#DIR=/mnt/USB1
 
 if [[ -d "$DIR" ]]; then
 	echo -e "\e[0;32mThe directory exists. It will be used for your configs.\e[0m"
@@ -19,24 +20,30 @@ NEWFOL="$DIR/CONFS-$DAT"
 
 # With -o argument, it overrides an existing folder
 if [[ -d "$NEWFOL" && "$1" = "-o" ]]; then
-	rm -R "$NEWFOL"
 	echo -e "\e[0;31mOverwriting the existing folder!\e[0m"
+	rm -R "$NEWFOL"
 fi
 
-if [[ -d "$NEWFOL" ]]; then
+if [[ -e "$DIR/CONFS-$DAT.tar.gz" && "$1" = "-o" ]]; then
+	echo -e "\e[0;31mOverwriting the existing archive!\e[0m"
+	rm "$DIR/CONFS-$DAT.tar.gz"
+fi
+
+if [[ -d "$NEWFOL" || -e "$DIR/CONFS-$DAT.tar.gz" ]]; then
 	echo -e "\e[0;31mWARNING: You already synchronised your files today!\e[0m"
 	exit
 	else
 	mkdir -p "$NEWFOL"
 fi
 
+#-------------------------------------
 #Filesystem
 BOOTF="/boot/syslinux/syslinux.cfg"
 ETCF="/etc/fstab /etc/issue /etc/locale.conf /etc/mkinitcpio.conf /etc/mkinitcpio-custom.conf /etc/nanorc /etc/wpa_supplicant.conf"
 PACF="/etc/pacman.conf /etc/pacman.d/mirrorlist"
 NETF="/etc/network.d/Madbox /etc/conf.d/netcfg"
 MODF="/etc/modprobe.d/modprobe.conf"
-XORGF="/etc/X11/xorg.conf.d/10-keyboard.conf /etc/X11/xorg.conf.d/10-nvidia.conf"
+XORGF="/etc/X11/xorg.conf.d/10-keyboard.conf /etc/X11/xorg.conf.d/20-nvidia.conf"
 NANF="/usr/share/nano/conf.nanorc /usr/share/nano/pkgbuild.nanorc"
 #User
 BASHF="$HOME/.bashrc $HOME/.bash_profile"
@@ -45,17 +52,11 @@ FIREF=$(find $HOME -type d -iname "*.default")
 
 #Option: comment $OPTF if you don't need it.
 OPTF="$HOME/.bin/ $HOME/.fonts/ $HOME/.moc/themes/ $HOME/.themes/ $HOME/Documents/Font/ $HOME/Documents/Pics/ $HOME/Documents/bookmarks.html $HOME/Documents/Certificate_Mad.p12"
-ARCF="$HOME/Builds"
+ARCF="Builds"
+#-------------------------------------
 
 #Message
 echo -e "\e[0;33mThe following files will be copied\e[0m => $BOOTF $ETCF $PACF $NETF $MODF $XORGF $NANF $BASHF $MISCF"
-
-if [[ -n $FIREF ]]; then
-	cp -r $FIREF/searchplugins/ $NEWFOL
-	cp $FIREF/prefs.js $NEWFOL
-else
-	echo -e "\e[0;31mNo Firefox profile found!\e[0m"
-fi
 
 #Copy core files
 for FILES in "$BOOTF $ETCF $PACF $NETF $MODF $XORGF $NANF $BASHF $MISCF"
@@ -68,19 +69,37 @@ done
 echo -e "$DAT\n" > $NEWFOL/pacman_pkgs.out
 pacman -Q >> $NEWFOL/pacman_pkgs.out
 
+if [[ -n $FIREF ]]; then
+	cp -r $FIREF/searchplugins/ $NEWFOL
+	cp $FIREF/prefs.js $NEWFOL
+	else
+	echo -e "\e[0;31mNo Firefox profile found!\e[0m"
+fi
+
 #Option
 if [[ -n "$OPTF" ]]; then
 	echo -e "\n\e[0mOptional files will be saved!"
 	mkdir -p $NEWFOL/OPT
-	cp -r --preserve=links $OPTF $NEWFOL/OPT
+	cp -r $OPTF $NEWFOL/OPT
 	else
 	echo -e "\e[0mNo optional files defined!"
 fi
 
-if [[ -n "$ARCF" ]]; then
+if [[ -n "$ARCF" && -d "$HOME/Builds" ]]; then
+	cd $HOME
 	tar -czf $NEWFOL/Builds.tar.gz $ARCF
 fi
 
 echo -e "\n\e[0mYou saved $(ls -A $NEWFOL | wc -l) files"
+
+if [[ "$TARGZ" = yes ]]; then
+	cd $DIR
+	tar -czf "CONFS-$DAT".tar.gz "CONFS-$DAT"
+	echo -e "\e[0;32mArchive has been created\n\e[0;31mRemoving folder!\e[0m"
+	rm -R $NEWFOL
+	else
+	echo -e "\e[0;33mArchive option turned off!\e[0m"
+fi
+
 echo -e "\e[0;32mDone.\e[0m"
 exit
