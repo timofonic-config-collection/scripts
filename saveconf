@@ -3,9 +3,20 @@
 # This script saves core config files for Archlinux in the specified folder
 # If you want to use it, you may change $DIRS and files accordingly!
 
-TARGZ=no
+TARGZ=yes
 DIR=$HOME/Documents
 #DIR=/mnt/USB1
+
+usage() {
+	echo "Usage ${0##*/} [OPTARG]"
+	echo "  OPTARG:"
+	echo -e "    -o 	Overwrite existing tar.gz archive or directory\n"
+}
+
+if [[ "$1" = -h ]]; then
+	usage
+	exit
+fi 
 
 if [[ -d "$DIR" ]]; then
 	echo -e "\e[0;32mThe directory exists. It will be used for your configs.\e[0m"
@@ -69,11 +80,11 @@ done
 echo -e "$DAT\n" > $NEWFOL/pacman_pkgs.out
 pacman -Q >> $NEWFOL/pacman_pkgs.out
 
-if [[ -n $FIREF ]]; then
-	cp -r $FIREF/searchplugins/ $NEWFOL
+if [[ -n $FIREF && -d $FIREF/searchplugins ]]; then
+	cp -r $FIREF/searchplugins $NEWFOL
 	cp $FIREF/prefs.js $NEWFOL
 	else
-	echo -e "\e[0;31mNo Firefox profile found!\e[0m"
+	echo -e "\n\e[0;31mNo Firefox profile found!\e[0m"
 fi
 
 #Option
@@ -90,12 +101,12 @@ if [[ -n "$ARCF" && -d "$HOME/Builds" ]]; then
 	tar -czf $NEWFOL/Builds.tar.gz $ARCF
 fi
 
-echo -e "\n\e[0mYou saved $(ls -A $NEWFOL | wc -l) files"
+echo -e "\n\e[0mThe script saved $(find $NEWFOL -type f | wc -l) files\n"
 
-if [[ "$TARGZ" = yes ]]; then
+if [[ "$TARGZ" = yes || "$TARGZ" = y ]]; then
 	cd $DIR
 	tar -czf "CONFS-$DAT".tar.gz "CONFS-$DAT"
-	echo -e "\e[0;32mArchive has been created\n\e[0;31mRemoving folder!\e[0m"
+	echo -e "\e[0;32mArchive has been successfully created"
 	rm -R $NEWFOL
 	else
 	echo -e "\e[0;33mArchive option turned off!\e[0m"
