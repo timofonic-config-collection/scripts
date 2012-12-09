@@ -24,7 +24,7 @@ REPO=$2
 GET=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ {gsub (/,/,""); print $2}')
 NUMBR=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ {gsub (/,/,""); print $2}' | wc -l)
 
-if [[ $NUMBR != 1 ]]; then
+if [[ ! -z $GET && $NUMBR != 1 ]]; then
 	unset GET
 	GET=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ && count++ == 1 {gsub (/,/,""); print $2}')
 fi
