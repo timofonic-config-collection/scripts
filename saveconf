@@ -3,12 +3,12 @@
 # This script saves core config files for Archlinux in the specified folder
 # If you want to use it, you may change $DIRS and files accordingly!
 
-TARGZ=yes
-DIR=$HOME/Documents
-#DIR=/mnt/USB1
+TARGZ=y
+#DIR=$HOME/Documents
+DIR=/mnt/USB1
 
 usage() {
-	echo "Usage ${0##*/} [OPTARG]"
+	echo "Usage: ${0##*/} [OPTARG]"
 	echo "  OPTARG:"
 	echo -e "    -o 	Overwrite existing tar.gz archive or directory\n"
 }
@@ -29,7 +29,7 @@ fi
 DAT=$(date "+%d-%m-%Y")
 NEWFOL="$DIR/CONFS-$DAT"
 
-# With -o argument, it overrides an existing folder
+# With -o argument, it overrides an existing folder / archive
 if [[ -d "$NEWFOL" && "$1" = "-o" ]]; then
 	echo -e "\e[0;31mOverwriting the existing folder!\e[0m"
 	rm -R "$NEWFOL"
@@ -62,7 +62,8 @@ MISCF="$HOME/.Xresources $HOME/.dir_colors $HOME/.gitconfig $HOME/.xinitrc $HOME
 FIREF=$(find $HOME -type d -iname "*.default")
 
 #Option: comment $OPTF if you don't need it.
-OPTF="$HOME/.bin/ $HOME/.fonts/ $HOME/.moc/themes/ $HOME/.themes/ $HOME/Documents/Font/ $HOME/Documents/Pics/ $HOME/Documents/bookmarks.html $HOME/Documents/Certificate_Mad.p12"
+OPTF="$HOME/.bin/ $HOME/.config/geany/colorschemes/ $HOME/.fonts/ $HOME/.moc/themes/ $HOME/.themes/ $HOME/Documents/Font/ $HOME/Documents/Pics/ $HOME/Documents/bookmarks.html $HOME/Documents/Certificate_Mad.p12"
+SHF=".ssh/"
 ARCF="Builds"
 #-------------------------------------
 
@@ -76,16 +77,17 @@ for FILES in "$BOOTF $ETCF $PACF $NETF $MODF $XORGF $NANF $BASHF $MISCF"
 		cp -v $FILES $NEWFOL
 done
 
-#Packages list
-echo -e "$DAT\n" > $NEWFOL/pacman_pkgs.out
-pacman -Q >> $NEWFOL/pacman_pkgs.out
-
 if [[ -n $FIREF && -d $FIREF/searchplugins ]]; then
 	cp -r $FIREF/searchplugins $NEWFOL
 	cp $FIREF/prefs.js $NEWFOL
 	else
 	echo -e "\n\e[0;31mNo Firefox profile found!\e[0m"
 fi
+
+#Packages list
+echo -e "$DAT\n" > $NEWFOL/pacman_pkgs.out
+pacman -Q >> $NEWFOL/pacman_pkgs.out
+echo -e "\n$(pacman -Q | wc -l) packages" >> $NEWFOL/pacman_pkgs.out
 
 #Option
 if [[ -n "$OPTF" ]]; then
@@ -94,6 +96,11 @@ if [[ -n "$OPTF" ]]; then
 	cp -r $OPTF $NEWFOL/OPT
 	else
 	echo -e "\e[0mNo optional files defined!"
+fi
+
+if [[ -n "$SHF" ]]; then
+	cd $HOME
+	tar -czf $NEWFOL/OPT/SSH.tar.gz $SHF
 fi
 
 if [[ -n "$ARCF" && -d "$HOME/Builds" ]]; then
