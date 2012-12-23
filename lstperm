@@ -1,0 +1,37 @@
+#!/bin/bash
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+#Default UNIX permissions
+FILE=644
+DIR=755
+
+#List folders or directories which don't have default UNIX permissions
+if [[ "$1" = -h ]]; then
+	echo "Usage: ${0##*/} [optarg]"
+	echo "Optarg:"
+	echo "   -f			Search for files with different permissions (default)"
+	echo -e "   -d			Search for directories with differents permissions\n"
+	exit
+fi 
+
+if [[ -z "$1" || "$1" = -f ]]; then
+	if [[ $(find -type f ! -perm "$FILE" | wc -l) = 0 ]]; then
+		echo NADA
+	elif [[ $(find -type f ! -perm "$FILE" | wc -l) -gt 34 ]]; then
+		find -type f ! -perm "$FILE" | less
+	else
+		find -type f ! -perm "$FILE"
+	fi
+	exit
+fi
+
+if [[ "$1" = -d ]]; then
+	if [[ $(find -type d ! -perm "$DIR" | wc -l) = 0 ]]; then
+		echo NADA
+	elif [[ $(find -type d ! -perm "$DIR" | wc -l) -gt 34 ]]; then
+		find -type d ! -perm "$DIR" | less
+	else
+		find -type d ! -perm "$DIR"
+	fi
+	exit
+fi
