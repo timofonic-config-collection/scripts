@@ -3,6 +3,8 @@
 
 DATE=$(date '+%A %d %B')
 TIME=$(date '+%R')
+# Not supported by Desktop
+#APM=$(/usr/sbin/hdparm -I /dev/sda | grep 'Advanced power')
 PCC=$(/usr/sbin/smartctl -A /dev/sda | grep -i 'Load_Cycle_Count')
 
 echo -e "--> $DATE | $TIME <--"

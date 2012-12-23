@@ -1,0 +1,34 @@
+#!/bin/bash
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+# VALUE = 254
+HDP=$(sudo hdparm -I /dev/sda | awk '/Advanced power/ {print $5}')
+if [[ "$HDP" = "254" ]]; then
+	echo -e "\e[0;32m$HDP\e[0m"
+else
+	echo -e "\e[0;31m$HDP\e[0m"
+fi
+
+# VALUE1 = profile | VALUE2 = mid
+PWM=$(cat /sys/class/drm/card0/device/power_method)
+PWP=$(cat /sys/class/drm/card0/device/power_profile)
+if [[ "$PWM" = "profile" ]]; then
+	echo -e "\e[0;32m$PWM\e[0m"
+else
+	echo -e "\e[0;31m$PWM\e[0m"
+fi
+if [[ "$PWP" = "mid" ]]; then
+	echo -e "\e[0;32m$PWP\e[0m"
+else
+	echo -e "\e[0;31m$PWM\e[0m"
+fi
+
+# VALUE = 0
+NMI=$(cat /proc/sys/kernel/nmi_watchdog)
+if [[ "$NMI" = 0 ]]; then
+	echo -e "\e[0;32m$NMI\e[0m"
+else
+	echo -e "\e[0;31m$PWM\e[0m"
+fi
+
+exit

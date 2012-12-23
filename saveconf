@@ -3,9 +3,9 @@
 # This script saves core config files for Archlinux in the specified folder
 # If you want to use it, you may change $DIRS and files accordingly!
 
-TARGZ=y
-#DIR=$HOME/Documents
-DIR=/mnt/USB1
+TARGZ=n
+DIR=$HOME/Documents
+#DIR=/mnt/USB1
 
 usage() {
 	echo "Usage: ${0##*/} [OPTARG]"
