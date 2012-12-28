@@ -3,9 +3,9 @@
 # This script saves core config files for Archlinux in the specified folder
 # If you want to use it, you may change $DIRS and files accordingly!
 
-TARGZ=n
-DIR=$HOME/Documents
-#DIR=/mnt/USB1
+TARGZ=y
+#DIR=$HOME/Documents
+DIR=/mnt/USB1/CONFSAVE
 
 usage() {
 	echo "Usage: ${0##*/} [OPTARG]"
@@ -59,7 +59,7 @@ NANF="/usr/share/nano/conf.nanorc /usr/share/nano/pkgbuild.nanorc"
 #User
 BASHF="$HOME/.bashrc $HOME/.bash_profile"
 MISCF="$HOME/.Xresources $HOME/.dir_colors $HOME/.gitconfig $HOME/.xinitrc $HOME/OUT.out $HOME/.config/user-dirs.conf $HOME/.config/fontconfig/fonts.conf"
-FIREF=$(find $HOME -type d -iname "*.default")
+FIREF=$(find $HOME/.mozilla -type d -iname "*.default")
 
 #Option: comment $OPTF if you don't need it.
 OPTF="$HOME/.bin/ $HOME/.config/geany/colorschemes/ $HOME/.fonts/ $HOME/.moc/themes/ $HOME/.themes/ $HOME/Documents/Font/ $HOME/Documents/Pics/ $HOME/Documents/bookmarks.html $HOME/Documents/Certificate_Mad.p12"
@@ -77,9 +77,11 @@ for FILES in "$BOOTF $ETCF $PACF $NETF $MODF $XORGF $NANF $BASHF $MISCF"
 		cp -v $FILES $NEWFOL
 done
 
-if [[ -n $FIREF && -d $FIREF/searchplugins ]]; then
-	cp -r $FIREF/searchplugins $NEWFOL
+if [[ -n $FIREF && -d $FIREF/ ]]; then
 	cp $FIREF/prefs.js $NEWFOL
+		if [[ -d $FIREF/searchplugins ]]; then
+			cp -r $FIREF/searchplugins $NEWFOL
+		fi
 	else
 	echo -e "\n\e[0;31mNo Firefox profile found!\e[0m"
 fi

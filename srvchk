@@ -3,10 +3,14 @@
 
 # VALUE = 254
 HDP=$(sudo hdparm -I /dev/sda | awk '/Advanced power/ {print $5}')
-if [[ "$HDP" = "254" ]]; then
-	echo -e "\e[0;32m$HDP\e[0m"
+if [[ -x "/sbin/hdparm" ]]; then
+	if [[ "$HDP" = "254" ]]; then
+		echo -e "\e[0;32m$HDP\e[0m"
+	else
+		echo -e "\e[0;31m$HDP\e[0m"
+	fi
 else
-	echo -e "\e[0;31m$HDP\e[0m"
+	Hdparm is not installed!
 fi
 
 # VALUE1 = profile | VALUE2 = mid
@@ -20,7 +24,7 @@ fi
 if [[ "$PWP" = "mid" ]]; then
 	echo -e "\e[0;32m$PWP\e[0m"
 else
-	echo -e "\e[0;31m$PWM\e[0m"
+	echo -e "\e[0;31m$PWP\e[0m"
 fi
 
 # VALUE = 0
@@ -28,7 +32,7 @@ NMI=$(cat /proc/sys/kernel/nmi_watchdog)
 if [[ "$NMI" = 0 ]]; then
 	echo -e "\e[0;32m$NMI\e[0m"
 else
-	echo -e "\e[0;31m$PWM\e[0m"
+	echo -e "\e[0;31m$NMI\e[0m"
 fi
 
 exit
