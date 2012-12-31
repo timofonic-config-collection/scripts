@@ -3,9 +3,9 @@
 # This script saves core config files for Archlinux in the specified folder
 # If you want to use it, you may change $DIRS and files accordingly!
 
-TARGZ=y
-#DIR=$HOME/Documents
-DIR=/mnt/USB1/CONFSAVE
+DIR=$HOME/Documents
+#DIR=/mnt/USB1/CONFSAVE
+TARGZ=yes
 
 usage() {
 	echo "Usage: ${0##*/} [OPTARG]"
@@ -19,12 +19,19 @@ if [[ "$1" = -h ]]; then
 fi 
 
 if [[ -d "$DIR" ]]; then
-	echo -e "\e[0;32mThe directory exists. It will be used for your configs.\e[0m"
-	echo -e "\e[0;33mStarting backup...\e[0m"
+	echo -e "\e[0;32mThe directory exists. It will be used for your configs.\n\e[0;33mStarting backup...\e[0m"
 	else
 	echo -e "\e[0;31mThe directory does not exist. You should change DIR location!\e[0m"
 	exit
 fi
+
+# It counts existing archives and delete the oldest file if the folder, contains more than (or equal) 5 files
+if [[ "$TARGZ" = yes && $(find $DIR -type f -iname "CONFS*.tar.gz" | wc -l) -ge 5 ]]; then
+	echo -e "\e[0;31mThe directory contains more than 5 archives!\nDeleting the oldest archive\e[0m"
+	FILDEL=$(ls -1t | tail -1)
+	rm $FILDEL
+fi
+
 
 DAT=$(date "+%d-%m-%Y")
 NEWFOL="$DIR/CONFS-$DAT"

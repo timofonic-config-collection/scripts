@@ -2,6 +2,7 @@
 # Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 # IMPORTANT!!! Do not spam it, because you'll reach API Rate Limit!
 # You need bc calculator
+# TODO: Add Bitbucket support
 
 usage() {
 	echo "Usage: ${0##*/} [USER] [REPOSITORY]"
@@ -18,10 +19,6 @@ if [[ ! $# = 2 ]]; then
 	usage
 	exit
 fi
-
-#if [[ "$1" = "-c" ]]; then
-	#curl -s https://api.github.com
-#fi
 
 if [[ "$1" = "-l" ]]; then
 	curl -s https://api.github.com/users/$2/repos | awk '/"name"/ {gsub (/"/,""); gsub (/,/,""); print $2}'
