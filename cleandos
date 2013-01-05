@@ -18,7 +18,7 @@ if [[ "$DES" != 0 ]]; then
 fi
 
 if [[ "$DIR" != 0 ]]; then
-	echo You have $RED$DIR$DEF .directory
+	echo -e "You have $RED$DIR$DEF .directory"
 fi
 
 if [[ -z "$(find -type f -iname 'Thumbs.db')" ]]; then

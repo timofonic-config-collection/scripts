@@ -5,7 +5,7 @@
 
 DIR=$HOME/Documents
 #DIR=/mnt/USB1/CONFSAVE
-TARGZ=yes
+TARGZ=no
 
 usage() {
 	echo "Usage: ${0##*/} [OPTARG]"
@@ -69,7 +69,7 @@ MISCF="$HOME/.Xresources $HOME/.dir_colors $HOME/.gitconfig $HOME/.xinitrc $HOME
 FIREF=$(find $HOME/.mozilla -type d -iname "*.default")
 
 #Option: comment $OPTF if you don't need it.
-OPTF="$HOME/.bin/ $HOME/.config/geany/colorschemes/ $HOME/.fonts/ $HOME/.moc/themes/ $HOME/.themes/ $HOME/Documents/Font/ $HOME/Documents/Pics/ $HOME/Documents/bookmarks.html $HOME/Documents/Certificate_Mad.p12"
+OPTF="$HOME/.bin/ $HOME/.config/geany/colorschemes/ $HOME/.fonts/ $HOME/.moc/ $HOME/.themes/ $HOME/Documents/Font/ $HOME/Documents/Pics/ $HOME/Documents/bookmarks.html $HOME/Documents/Certificate_Mad.p12"
 SHF=".ssh/"
 ARCF="Builds"
 #-------------------------------------
@@ -87,7 +87,8 @@ done
 if [[ -n $FIREF && -d $FIREF/ ]]; then
 	cp $FIREF/prefs.js $NEWFOL
 		if [[ -d $FIREF/searchplugins ]]; then
-			cp -r $FIREF/searchplugins $NEWFOL
+			mkdir -p $NEWFOL/FFox
+			cp -r $FIREF/searchplugins $NEWFOL/FFox/searchplugins
 		fi
 	else
 	echo -e "\n\e[0;31mNo Firefox profile found!\e[0m"
@@ -95,8 +96,8 @@ fi
 
 #Packages list
 echo -e "$DAT\n" > $NEWFOL/pacman_pkgs.out
+echo -e "$(pacman -Q | wc -l) packages\n" >> $NEWFOL/pacman_pkgs.out
 pacman -Q >> $NEWFOL/pacman_pkgs.out
-echo -e "\n$(pacman -Q | wc -l) packages" >> $NEWFOL/pacman_pkgs.out
 
 #Option
 if [[ -n "$OPTF" ]]; then
