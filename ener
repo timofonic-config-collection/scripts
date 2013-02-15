@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 DEF="\e[0m"
@@ -12,7 +12,7 @@ display_usage() {
 	echo -e "     -r 	Reboot the computer\n"
 	}
 
-if [[ -z "$1" || "$1" = -h ]]; then
+if [ -z "$1" ] || [ "$1" = -h ]; then
 	display_usage
 	exit
 fi 

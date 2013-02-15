@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 #LD_LIBRARY_PATH=$HOME/.bin/lib $HOME/.HoN/hon-x86_64

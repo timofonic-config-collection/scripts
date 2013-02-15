@@ -1,0 +1,26 @@
+#!/bin/sh
+#Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#List archive content
+
+listar() {
+	if [ -f $1 ]; then
+		case $1 in
+			*.tar) tar -tf $1 ;;
+			*.tar.bz2) tar -jtf $1 ;;
+			*.tar.gz) tar -ztf $1 ;;
+			*.tar.xz) tar -Jtf $1 ;;
+			*.rar) unrar l $1 ;;
+			*.zip) unzip -l $1 ;;
+		esac
+	else
+		echo FOO
+	fi
+}
+
+if [ "$(listar $1 | wc -l)" -gt 40 ]; then
+	listar $1 | less
+else
+	listar $1
+fi
+
+exit

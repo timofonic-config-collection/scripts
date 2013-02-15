@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 # Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 # This script saves core config files for Archlinux in the specified folder
 # If you want to use it, you may change $DIRS and files accordingly!
 
 DIR=$HOME/Documents
 #DIR=/mnt/USB1/CONFSAVE
-TARGZ=no
+TARGZ=yes
 
 usage() {
 	echo "Usage: ${0##*/} [OPTARG]"
@@ -13,12 +13,12 @@ usage() {
 	echo -e "    -o 	Overwrite existing tar.gz archive or directory\n"
 }
 
-if [[ "$1" = -h ]]; then
+if [ "$1" = -h ]; then
 	usage
 	exit
 fi 
 
-if [[ -d "$DIR" ]]; then
+if [ -d "$DIR" ]; then
 	echo -e "\e[0;32mThe directory exists. It will be used for your configs.\n\e[0;33mStarting backup...\e[0m"
 	else
 	echo -e "\e[0;31mThe directory does not exist. You should change DIR location!\e[0m"
@@ -26,8 +26,9 @@ if [[ -d "$DIR" ]]; then
 fi
 
 # It counts existing archives and delete the oldest file if the folder, contains more than (or equal) 5 files
-if [[ "$TARGZ" = yes && $(find $DIR -type f -iname "CONFS*.tar.gz" | wc -l) -ge 5 ]]; then
+if [ "$TARGZ" = yes ] && [ "$(find $DIR -type f -iname "CONFS*.tar.gz" | wc -l)" -ge 5 ]; then
 	echo -e "\e[0;31mThe directory contains more than 5 archives!\nDeleting the oldest archive\e[0m"
+	cd $DIR
 	FILDEL=$(ls -1t | tail -1)
 	rm $FILDEL
 fi
@@ -37,17 +38,17 @@ DAT=$(date "+%d-%m-%Y")
 NEWFOL="$DIR/CONFS-$DAT"
 
 # With -o argument, it overrides an existing folder / archive
-if [[ -d "$NEWFOL" && "$1" = "-o" ]]; then
+if [ -d "$NEWFOL" ] && [ "$1" = "-o" ]; then
 	echo -e "\e[0;31mOverwriting the existing folder!\e[0m"
 	rm -R "$NEWFOL"
 fi
 
-if [[ -e "$DIR/CONFS-$DAT.tar.gz" && "$1" = "-o" ]]; then
+if [ -e "$DIR/CONFS-$DAT.tar.gz" ] && [ "$1" = "-o" ]; then
 	echo -e "\e[0;31mOverwriting the existing archive!\e[0m"
 	rm "$DIR/CONFS-$DAT.tar.gz"
 fi
 
-if [[ -d "$NEWFOL" || -e "$DIR/CONFS-$DAT.tar.gz" ]]; then
+if [ -d "$NEWFOL" ] || [ -e "$DIR/CONFS-$DAT.tar.gz" ]; then
 	echo -e "\e[0;31mWARNING: You already synchronised your files today!\e[0m"
 	exit
 	else
@@ -84,9 +85,9 @@ for FILES in "$BOOTF $ETCF $PACF $NETF $MODF $XORGF $NANF $BASHF $MISCF"
 		cp -v $FILES $NEWFOL
 done
 
-if [[ -n $FIREF && -d $FIREF/ ]]; then
+if [ -n "$FIREF" ] && [ -d "$FIREF/" ]; then
 	cp $FIREF/prefs.js $NEWFOL
-		if [[ -d $FIREF/searchplugins ]]; then
+		if [ -d "$FIREF/searchplugins" ]; then
 			mkdir -p $NEWFOL/FFox
 			cp -r $FIREF/searchplugins $NEWFOL/FFox/searchplugins
 		fi
@@ -100,7 +101,7 @@ echo -e "$(pacman -Q | wc -l) packages\n" >> $NEWFOL/pacman_pkgs.out
 pacman -Q >> $NEWFOL/pacman_pkgs.out
 
 #Option
-if [[ -n "$OPTF" ]]; then
+if [ -n "$OPTF" ]; then
 	echo -e "\n\e[0mOptional files will be saved!"
 	mkdir -p $NEWFOL/OPT
 	cp -r $OPTF $NEWFOL/OPT
@@ -108,19 +109,19 @@ if [[ -n "$OPTF" ]]; then
 	echo -e "\e[0mNo optional files defined!"
 fi
 
-if [[ -n "$SHF" ]]; then
+if [ -n "$SHF" ]; then
 	cd $HOME
 	tar -czf $NEWFOL/OPT/SSH.tar.gz $SHF
 fi
 
-if [[ -n "$ARCF" && -d "$HOME/Builds" ]]; then
+if [ -n "$ARCF" ] && [ -d "$HOME/Builds" ]; then
 	cd $HOME
 	tar -czf $NEWFOL/Builds.tar.gz $ARCF
 fi
 
 echo -e "\n\e[0mThe script saved $(find $NEWFOL -type f | wc -l) files\n"
 
-if [[ "$TARGZ" = yes || "$TARGZ" = y ]]; then
+if [ "$TARGZ" = yes ] || [ "$TARGZ" = y ]; then
 	cd $DIR
 	tar -czf "CONFS-$DAT".tar.gz "CONFS-$DAT"
 	echo -e "\e[0;32mArchive has been successfully created"

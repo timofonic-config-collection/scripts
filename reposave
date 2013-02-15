@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 cd /mnt/public/REPOS
@@ -6,19 +6,20 @@ cd /mnt/public/REPOS
 REPS=$(ls -d */)
 DAT=$(date "+%d-%m-%Y")
 DIRD=/mnt/USB1/CONFSAVE
+#DIRD=$HOME/Documents
 NUMBAR=$(find $DIRD -type f -iname "REPOS*.tar.gz" | wc -l)
 
 tar -czf "REPOS-$DAT.tar.gz" $REPS
 
-if [[ -n "$DIRD" && -d "$DIRD" ]]; then
-	if [[ "$NUMBAR" -ge 3 ]]; then
+if [ -n "$DIRD" ] && [ -d "$DIRD" ]; then
+	if [ "$NUMBAR" -ge 3 ]; then
 		FILAST=$(ls -1t $DIRD/REPOS* | tail -1)
 		rm $FILAST
 	fi
 			mv "REPOS-$DAT.tar.gz" $DIRD
-			echo "Saved archive in $DIRD"
+			echo -e "Saved archive in \e[0;32m$DIRD\e[0m"
 	else
-			echo "Saved archive in /mnt/public/REPOS"
+			echo -e "Saved archive in \e[0;32m/mnt/public/REPOS\e[0m"
 fi
 
 exit

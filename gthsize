@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 # IMPORTANT!!! Do not spam it, because you'll reach API Rate Limit!
 # You need bc calculator
@@ -10,17 +10,17 @@ usage() {
 	echo -e "   [REPOSITORY] -> Repository owned by previous user\n"
 }
 
-if [[ -z "$1" || "$1" = -h ]]; then
+if [ -z "$1" ] || [ "$1" = -h ]; then
 	usage
 	exit
 fi
 
-if [[ ! $# = 2 ]]; then
+if [ ! $# = 2 ]; then
 	usage
 	exit
 fi
 
-if [[ "$1" = "-l" ]]; then
+if [ "$1" = "-l" ]; then
 	curl -s https://api.github.com/users/$2/repos | awk '/"name"/ {gsub (/"/,""); gsub (/,/,""); print $2}'
 	exit
 fi
@@ -30,11 +30,11 @@ REPO=$2
 GET=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ {gsub (/,/,""); print $2}')
 NUMBR=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ {gsub (/,/,""); print $2}' | wc -l)
 
-if [[ ! -z $GET ]]; then
-		if [[ ! $NUMBR = 1 ]]; then
+if [ ! -z $GET ]; then
+		if [ ! $NUMBR = 1 ]; then
 			unset GET
 			GET=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ && count++ == 1 {gsub (/,/,""); print $2}')
-		elif [[ $GET -gt 1024 ]]; then
+		elif [ $GET -gt 1024 ]; then
 			TOT=$(echo "scale=2; ${GET}/1024" | bc)
 			echo -e "\e[0;32m${TOT}\e[0m Mb"
 			exit

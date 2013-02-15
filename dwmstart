@@ -1,17 +1,17 @@
 #!/bin/bash
 #Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
-#Log
+#Logs
+urxvt -geometry 80x23+625+20 -name temp -title temp -e sh -c "watch -n15 sensors" &
+urxvt -geometry 80x23+50+20 -name xlog -title xlog -e sh -c "tail -n 30 -f ~/.log/xlog | ccze -A" &
 #urxvt -geometry 80x23 -name dwmlog -title dwmlog -e sh -c "tail -f ~/.log/dwmlog | ccze -A" &
-urxvt -geometry 80x23 -name xlog -title xlog -e sh -c "tail -n 30 -f ~/.log/xlog | ccze -A" &
 
-UNA=$(uname -rm)
+UNA=$(uname -r)
 DAT=$(date "+%^a %d %^b" | sed 's/é/E/')
 while true
 do
-    #TEMOLD=$(nvidia-settings -q GPUCoreTemp -t)
     TEM=$(nvidia-smi -q -d TEMPERATURE | awk 'NR == 10 {print $3}')
-    BAR=$(echo -e "\x03ker\x04 \x02$UNA\x04 \x03gpu\x04 \x02$TEM C\x04 \x03$DAT\x04 / \x02$(date +%R)")
+    BAR=$(echo -e "\x02ker \x03$UNA \x02gpu \x03$TEM C \x02$DAT\x04 / \x03$(date +%R)")
     xsetroot -name "$BAR "
     sleep 1m
 done &

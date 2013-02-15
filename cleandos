@@ -1,5 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 #Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#Remove trash files from Windows or KDE (Thumbs.db for example)
 
 DEF="\e[0m"
 RED="\e[0;31m"
@@ -9,33 +10,33 @@ THU=$(find -type f -iname "Thumbs.db" | wc -l)
 DES=$(find -type f -iname "desktop.ini" | wc -l)
 DIR=$(find -type f -iname ".directory" | wc -l)
 
-if [[ "$THU" != 0 ]]; then
+if [ "$THU" != 0 ]; then
 	echo -e "You have $RED$THU$DEF Thumbs.db"
 fi
 
-if [[ "$DES" != 0 ]]; then
+if [ "$DES" != 0 ]; then
 	echo -e "You have $RED$DES$DEF desktop.ini"
 fi
 
-if [[ "$DIR" != 0 ]]; then
+if [ "$DIR" != 0 ]; then
 	echo -e "You have $RED$DIR$DEF .directory"
 fi
 
-if [[ -z "$(find -type f -iname 'Thumbs.db')" ]]; then
+if [ -z "$(find -type f -iname 'Thumbs.db')" ]; then
 	echo -e "$GREEN""No Thumbs.db file has been detected""$DEF"
 else 
 	find -type f -iname "Thumbs.db" -print0 | xargs -0 rm
 	echo -e "$RED""All Thumbs.db files found have been successfully deleted""$DEF"
 fi
 
-if [[ -z "$(find -type f -iname 'desktop.ini*')" ]]; then
+if [ -z "$(find -type f -iname 'desktop.ini*')" ]; then
 	echo -e "$GREEN""No desktop.ini file has been detected""$DEF"
 else 
 	find -type f -iname "desktop.ini*" -print0 | xargs -0 rm
 	echo -e "$RED""All desktop.ini files found have been successfully deleted""$DEF"
 fi
 
-if [[ -z "$(find -type f -iname '.directory')" ]]; then
+if [ -z "$(find -type f -iname '.directory')" ]; then
 	echo -e "$GREEN""No .directory file has been detected""$DEF"
 else 
 	find -type f -iname ".directory*" -print0 | xargs -0 rm

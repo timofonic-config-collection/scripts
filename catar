@@ -1,0 +1,26 @@
+#!/bin/sh
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+if [ ! $# = 2 ]; then
+	echo "Usage: ${0##*/} <archive_name> <filename>"
+	exit
+fi
+
+catar() {
+	if [ -f $1 ]; then
+		case $1 in
+			*.tar) tar -tf $1 $2 ;;
+			*.tar.bz2) tar -jtf $1 $2 ;;
+			*.tar.gz) tar -zxOf $1 $2 ;;
+			*.tar.xz) tar -JxOf $1 $2 ;;
+			*.rar) unrar p $1 $2 ;;
+			*.zip) unzip -l $1 $2 ;;
+		esac
+	else
+		echo FOO
+	fi
+}
+
+catar $1 $2
+
+exit

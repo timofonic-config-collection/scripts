@@ -1,13 +1,14 @@
-#!/bin/bash
+#!/bin/sh
 # Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# Remove existing pkg / src folders
 
-if [[ -d "pkg" ]]; then
+if [ -d "pkg" ]; then
 	echo -e "\e[0;31mDeleting pkg directory!\e[0m"
 	rm -r pkg
 else
 	echo -e "\e[0;32mDirectory pkg not found!\e[0m"
 fi
-if [[ -d "src" ]]; then
+if [ -d "src" ]; then
 	echo -e "\e[0;31mDeleting src directory!\e[0m"
 	rm -rf src
 else
