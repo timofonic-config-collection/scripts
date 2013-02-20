@@ -1,6 +1,6 @@
 #!/bin/sh
-# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-# Generate "ready-to-write" Jekyll posts & pages.
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   Generate "ready-to-write" Jekyll posts & pages.
 
 DIR=$HOME
 
@@ -38,5 +38,6 @@ if [ -d "$DIR/_posts" ]; then
 	echo "---" >> $ART
 else
 	echo -e "\033[0;31mDirectory doesn't exist!\033[0m"
+	exit
 fi
 exit

@@ -1,6 +1,6 @@
 #!/bin/sh
-# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-# Remove existing pkg / src folders
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   Remove existing pkg / src folders
 
 if [ -d "pkg" ]; then
 	echo -e "\e[0;31mDeleting pkg directory!\e[0m"

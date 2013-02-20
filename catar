@@ -1,5 +1,5 @@
 #!/bin/sh
-# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 if [ ! $# = 2 ]; then
 	echo "Usage: ${0##*/} <archive_name> <filename>"
@@ -15,9 +15,11 @@ catar() {
 			*.tar.xz) tar -JxOf $1 $2 ;;
 			*.rar) unrar p $1 $2 ;;
 			*.zip) unzip -l $1 $2 ;;
+			*) echo "Unknown archive extension" ; exit 1 ;;
 		esac
 	else
-		echo FOO
+		echo "Archive is missing!"
+		exit 1
 	fi
 }
 

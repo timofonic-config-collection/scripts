@@ -1,6 +1,6 @@
 #!/bin/sh
-#Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-#Remove trash files from Windows or KDE (Thumbs.db for example)
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   Remove trash files from Windows or KDE (Thumbs.db for example)
 
 DEF="\e[0m"
 RED="\e[0;31m"

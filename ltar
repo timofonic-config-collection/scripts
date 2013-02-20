@@ -1,6 +1,6 @@
 #!/bin/sh
-#Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-#List archive content
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   List archive content
 
 listar() {
 	if [ -f $1 ]; then

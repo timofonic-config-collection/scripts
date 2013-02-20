@@ -14,34 +14,34 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #
-#Moc Controller which provides info & control under Openbox
-#Author: Ypnose
-#You can contact me on website - Visit: http://tetedulinuxien.fr
-#Version: 1.13
-#This script will work much better with good id3tags
-#Thanks to Nic0 for some tips
+#  Moc Controller which provides info & control under Openbox
+#  Author: Ypnose
+#  You can contact me on website - Visit: http://tetedulinuxien.fr
+#  Version: 1.13
+#  This script will work much better with good id3tags
+#  Thanks to Nic0 for some tips
 
-#Changelog
-#1.00: Mocinfo is over.
-#1.01: Fixed a bug with & character.
-#1.02: Added "Bitrate" section.
-#1.03: Added some changes if the files played is .wav.
-#1.04: Added changes in "Bitrate" when the music is paused or stopped.
-#1.05: Changed Bitrate.
-#1.06: Changed the command. The previous one was functional but it could be broken if the file had bad id3tags.
-#1.07: Automatically detect file extension and shows a message (MP3, OGG or WAV).
-#1.08: Cleaned the entire code.
-#1.09: Added a new code for menu "Controls".
-#1.10: Webradio support. In "Type", it shows "NET" when you're listening to web stream instead of blank line.
-#1.11: Added "Time" part.
-#1.12: 2.5.0 Support. Many commands are more simple.
-#1.13: Fixed some issues after feedback from users.
+#  Changelog
+#    1.00: Mocinfo is over.
+#    1.01: Fixed a bug with & character.
+#    1.02: Added "Bitrate" section.
+#    1.03: Added some changes if the files played is .wav.
+#    1.04: Added changes in "Bitrate" when the music is paused or stopped.
+#    1.05: Changed Bitrate.
+#    1.06: Changed the command. The previous one was functional but it could be broken if the file had bad id3tags.
+#    1.07: Automatically detect file extension and shows a message (MP3, OGG or WAV).
+#    1.08: Cleaned the entire code.
+#    1.09: Added a new code for menu "Controls".
+#    1.10: Webradio support. In "Type", it shows "NET" when you're listening to web stream instead of blank line.
+#    1.11: Added "Time" part.
+#    1.12: 2.5.0 Support. Many commands are more simple.
+#    1.13: Fixed some issues after feedback from users.
 
-#HOWTOINSTALL
-#Edit your menu.xml and add this line:
-#<menu execute="/home/foo/.mocinfo.sh" id="pipe-music" label="MocInfo"/> (Replace foo with your username)
-#Make it executable. You can rename .mocinfo to mocinfo or whatever you want.
-#Change the location, if you don't want to place the script under your /home
+#  HOWTOINSTALL
+#   Edit your menu.xml and add this line:
+#   <menu execute="/home/foo/.mocinfo.sh" id="pipe-music" label="MocInfo"/> (Replace foo with your username)
+#   Make it executable. You can rename .mocinfo to mocinfo or whatever you want.
+#   Change the location, if you don't want to place the script under your /home
 
 if [ -z "$(pidof mocp)" ]; then
 	ZIK=$(echo "Moc is not running") #If Moc is not started, it shows a message.

@@ -1,6 +1,6 @@
 #!/bin/bash
-# Script by Falconindy
-# https://bbs.archlinux.org/viewtopic.php?id=131666
+#   Script by Falconindy
+#   https://bbs.archlinux.org/viewtopic.php?id=131666
 
 awk -v newsums="$(makepkg -g)" '
 BEGIN {

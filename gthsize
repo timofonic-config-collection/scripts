@@ -1,8 +1,8 @@
 #!/bin/sh
-# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-# IMPORTANT!!! Do not spam it, because you'll reach API Rate Limit!
-# You need bc calculator
-# TODO: Add Bitbucket support
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   IMPORTANT!!! Do not spam it, because you'll reach API Rate Limit!
+#   You need bc calculator
+#   TODO: Add Bitbucket support
 
 usage() {
 	echo "Usage: ${0##*/} [USER] [REPOSITORY]"

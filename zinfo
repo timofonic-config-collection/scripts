@@ -1,5 +1,5 @@
 #!/bin/sh
-#Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 ZIK=$(mocp -Q %title 2> /dev/null)
 notify-send -u low "Title = $ZIK"
 exit

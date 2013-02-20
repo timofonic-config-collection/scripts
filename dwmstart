@@ -1,9 +1,9 @@
 #!/bin/bash
-#Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 #Logs
-urxvt -geometry 80x23+625+20 -name temp -title temp -e sh -c "watch -n15 sensors" &
-urxvt -geometry 80x23+50+20 -name xlog -title xlog -e sh -c "tail -n 30 -f ~/.log/xlog | ccze -A" &
+urxvt -geometry 80x23+40+20 -name xlog -title xlog -e sh -c "tail -n 30 -f ~/.log/xlog | ccze -A" &
+urxvt -geometry 80x23+40+400 -name temp -title temp -e sh -c "watch -n15 sensors" &
 #urxvt -geometry 80x23 -name dwmlog -title dwmlog -e sh -c "tail -f ~/.log/dwmlog | ccze -A" &
 
 UNA=$(uname -r)

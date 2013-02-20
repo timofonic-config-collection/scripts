@@ -1,5 +1,5 @@
 #!/bin/sh
-# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 DEF="\e[0m"
 RED="\e[0;31m"

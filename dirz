@@ -1,6 +1,6 @@
 #!/bin/sh
-#Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-#List folders sizes
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   List folders sizes
 
 if [ "$1" = "-h" ]; then
 	echo "Usage: ${0##*/}"
