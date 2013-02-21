@@ -2,7 +2,7 @@
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 #   Generate "ready-to-write" Jekyll posts & pages.
 
-DIR=$HOME
+DIR=/mnt/public/REPOS/JekyBlog
 
 if [ -z "$1" ] || [ "$1" = "-h" ]; then
 	echo "Usage: ${0##*/} [OPTARG]"
@@ -29,12 +29,13 @@ NAME=$(echo "$1" | awk '{gsub (/ /,"-");print tolower($_)}')
 ART="$TIMDAT-$NAME.markdown"
 
 if [ -d "$DIR/_posts" ]; then
+	cd "$DIR/_posts"
 	echo "---" > $ART
 	echo "layout: post" >> $ART
 	echo "title: \"$1\"" >> $ART
 	echo "description: \"\"" >> $ART
 	echo "date: $TIMDAT `date \"+%H:%M:%S\"`" >> $ART
-	echo "categories: " >> $ART
+	echo "categories:" >> $ART
 	echo "---" >> $ART
 else
 	echo -e "\033[0;31mDirectory doesn't exist!\033[0m"
