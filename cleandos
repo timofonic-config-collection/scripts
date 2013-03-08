@@ -2,45 +2,41 @@
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 #   Remove trash files from Windows or KDE (Thumbs.db for example)
 
-DEF="\e[0m"
-RED="\e[0;31m"
-GREEN="\e[0;32m"
-CYAN="\e[0;36m"
 THU=$(find -type f -iname "Thumbs.db" | wc -l)
 DES=$(find -type f -iname "desktop.ini" | wc -l)
 DIR=$(find -type f -iname ".directory" | wc -l)
 
 if [ "$THU" != 0 ]; then
-	echo -e "You have $RED$THU$DEF Thumbs.db"
+	printf "You have \e[0;31m%d\e[0m Thumbs.db\n" "$THU"
 fi
 
 if [ "$DES" != 0 ]; then
-	echo -e "You have $RED$DES$DEF desktop.ini"
+	printf "You have \e[0;31m%d\e[0m desktop.ini\n" "$DES"
 fi
 
 if [ "$DIR" != 0 ]; then
-	echo -e "You have $RED$DIR$DEF .directory"
+	printf "You have \e[0;31m%d\e[0m .directory\n" "$DIR"
 fi
 
 if [ -z "$(find -type f -iname 'Thumbs.db')" ]; then
-	echo -e "$GREEN""No Thumbs.db file has been detected""$DEF"
+	printf "\e[0;32m%s\e[0m\n" "No Thumbs.db file has been detected"
 else 
-	find -type f -iname "Thumbs.db" -print0 | xargs -0 rm
-	echo -e "$RED""All Thumbs.db files found have been successfully deleted""$DEF"
+	find -type f -iname "Thumbs.db" | sed 's/./\\&/g' | xargs rm
+	printf "\e[0;31m%s\e[0m\n" "All Thumbs.db files found have been successfully deleted"
 fi
 
 if [ -z "$(find -type f -iname 'desktop.ini*')" ]; then
-	echo -e "$GREEN""No desktop.ini file has been detected""$DEF"
+	printf "\e[0;32m%s\e[0m\n" "No desktop.ini file has been detected"
 else 
-	find -type f -iname "desktop.ini*" -print0 | xargs -0 rm
-	echo -e "$RED""All desktop.ini files found have been successfully deleted""$DEF"
+	find -type f -iname "desktop.ini*" | sed 's/./\\&/g' | xargs rm
+	printf "\e[0;31m%s\e[0m\n" "All desktop.ini files found have been successfully deleted"
 fi
 
 if [ -z "$(find -type f -iname '.directory')" ]; then
-	echo -e "$GREEN""No .directory file has been detected""$DEF"
+	printf "\e[0;32m%s\e[0m\n" "No .directory file has been detected"
 else 
-	find -type f -iname ".directory*" -print0 | xargs -0 rm
-	echo -e "$RED""All .directory files found have been successfully deleted""$DEF"
+	find -type f -iname ".directory*" | sed 's/./\\&/g' | xargs rm
+	printf "\e[0;31m%s\e[0m\n" "All .directory files found have been successfully deleted"
 fi
-echo -e "$CYAN""Done""$DEF"
+printf "\e[0;36m%s\e[0m\n" "Done"
 exit

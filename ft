@@ -1,3 +1,4 @@
 #!/bin/sh
 cd ~/.fonts
 mkfontdir && xset fp rehash
+exit 0

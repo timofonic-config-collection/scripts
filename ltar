@@ -13,7 +13,7 @@ listar() {
 			*.zip) unzip -l $1 ;;
 		esac
 	else
-		echo FOO
+		printf "%s\n" "FOO"
 	fi
 }
 

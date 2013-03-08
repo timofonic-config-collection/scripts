@@ -3,18 +3,25 @@
 #   This script lists tar.xz packages
 
 WER=$(find -iname "*.pkg.tar.xz" | wc -l)
-
-echo -e "You have \e[0;32m$WER\e[0m packages in \e[0;33m$PWD\e[0m"
+printf "You have \e[0;32m%d\e[0m packages in \e[0;33m%s\e[0m\n" "$WER" "$PWD"
 
 if [ "$WER" = 0 ]; then
-	exit
+	exit 0
 fi
 
 while true; do
-    read -p "Would you like to list these packages ? [Y/n] " yn
-    case $yn in
-        [Yy]* ) find -type f -iname "*.pkg.tar.xz" -printf '\033[32m%f\033[0m ==> \033[33m%h\033[0m\n'; exit;;
-        [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
-    esac
+	printf "%s" "Would you like to list these packages ? [Y/n] "
+	read yn
+	case $yn in
+		[Yy]* )
+				find -type f -iname "*.pkg.tar.xz" -printf '\033[32m%f\033[0m ==> \033[33m%h\033[0m\n'
+				exit 0
+				;;
+		[Nn]* )
+				exit 0
+				;;
+		* )
+				printf "%s\n" "Please answer yes or no!"
+				;;
+	esac
 done

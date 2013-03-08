@@ -1,38 +1,38 @@
-#!/bin/bash
+#!/bin/sh
 # Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 # VALUE = 254
 HDP=$(sudo hdparm -I /dev/sda | awk '/Advanced power/ {print $5}')
-if [[ -x "/sbin/hdparm" ]]; then
-	if [[ "$HDP" = "254" ]]; then
-		echo -e "\e[0;32m$HDP\e[0m"
+if [ -x "/sbin/hdparm" ]; then
+	if [ "$HDP" = "254" ]; then
+		printf "\e[0;32m%d\e[0m\n" "$HDP"
 	else
-		echo -e "\e[0;31m$HDP\e[0m"
+		printf "\e[0;31m%d\e[0m\n" "$HDP"
 	fi
 else
-	Hdparm is not installed!
+	printf "%s\n" "Hdparm is not installed!"
 fi
 
 # VALUE1 = profile | VALUE2 = mid
 PWM=$(cat /sys/class/drm/card0/device/power_method)
 PWP=$(cat /sys/class/drm/card0/device/power_profile)
-if [[ "$PWM" = "profile" ]]; then
-	echo -e "\e[0;32m$PWM\e[0m"
+if [ "$PWM" = "profile" ]; then
+	printf "\e[0;32m%s\e[0m\n" "$PWM"
 else
-	echo -e "\e[0;31m$PWM\e[0m"
+	printf "\e[0;31m%s\e[0m\n" "$PWM"
 fi
-if [[ "$PWP" = "mid" ]]; then
-	echo -e "\e[0;32m$PWP\e[0m"
+if [ "$PWP" = "mid" ]; then
+	printf "\e[0;32m%s\e[0m\n" "$PWP"
 else
-	echo -e "\e[0;31m$PWP\e[0m"
+	printf "\e[0;31m%s\e[0m\n" "$PWP"
 fi
 
 # VALUE = 0
 NMI=$(cat /proc/sys/kernel/nmi_watchdog)
-if [[ "$NMI" = 0 ]]; then
-	echo -e "\e[0;32m$NMI\e[0m"
+if [ "$NMI" = 0 ]; then
+	printf "\e[0;32m%d\e[0m\n" "$NMI"
 else
-	echo -e "\e[0;31m$NMI\e[0m"
+	printf "\e[0;31m%d\e[0m\n" "$NMI"
 fi
 
 exit

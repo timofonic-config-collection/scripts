@@ -2,14 +2,24 @@
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 case "$1" in
-	up) amixer -q -c 0 set Master 4+ unmute ;;
-	down) amixer -q -c 0 set Master 4- unmute ;;
-	cas) amixer -q -c 0 set Master 20 unmute ;;
-	mute) amixer -q -c 0 set Master toggle ;;
-	*) exit ;;
+	up)
+	  amixer -q -c 0 set Master 4+ unmute
+	  ;;
+	down)
+	  amixer -q -c 0 set Master 4- unmute
+	  ;;
+	cas)
+	  amixer -q -c 0 set Master 20 unmute
+	  ;;
+	mute)
+	  amixer -q -c 0 set Master toggle
+	  ;;
+	*)
+	  exit 1
+	  ;;
 esac
 
-VOL=$(amixer get Master | awk 'END {print $4}')
-CAN=$(amixer get Master | awk 'END {print toupper($6)}')
-notify-send -u low "Volume = $VOL | Canal = $CAN"
-exit
+#VOL=$(amixer get Master | awk 'END {print $4}')
+#CAN=$(amixer get Master | awk 'END {print toupper($6)}')
+#notify-send -u low "Volume = $VOL | Canal = $CAN"
+exit 

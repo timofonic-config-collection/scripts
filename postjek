@@ -5,22 +5,22 @@
 DIR=/mnt/public/REPOS/JekyBlog
 
 if [ -z "$1" ] || [ "$1" = "-h" ]; then
-	echo "Usage: ${0##*/} [OPTARG]"
-	echo "     :OPTARG"
-	echo -e "    -p 	Create a new page instead of a new post/article\n"
-	exit
+	printf "%s\n" "Usage: ${0##*/} [OPTARG]"
+	printf "%s\n" "     :OPTARG"
+	printf "%s\n\n" "    -p 	Create a new page instead of a new post/article"
+	exit 1
 fi
 
 # Generate page
 if [ "$1" = "-p" ] && [ -n "$2" ]; then
 	NEWFOL=$(echo "$2" | awk '{print tolower($_)}')
 	mkdir -p "$DIR/$NEWFOL" && cd "$DIR/$NEWFOL"
-	echo -e "\033[0;33mYou may rename the folder!\033[0m"
-	echo "---" > index.markdown
-	echo "layout: page" >> index.markdown
-	echo "title: \"$2\"" >> index.markdown
-	echo "---" >> index.markdown
-	exit
+	printf "\033[0;33m%s\033[0m\n" "You may rename the folder!"
+	printf "%s\n" "---" > index.markdown
+	printf "%s\n" "layout: page" >> index.markdown
+	printf "%s\n" "title: \"$2\"" >> index.markdown
+	printf "%s\n" "---" >> index.markdown
+	exit 0
 fi
 
 # Generate post
@@ -30,15 +30,15 @@ ART="$TIMDAT-$NAME.markdown"
 
 if [ -d "$DIR/_posts" ]; then
 	cd "$DIR/_posts"
-	echo "---" > $ART
-	echo "layout: post" >> $ART
-	echo "title: \"$1\"" >> $ART
-	echo "description: \"\"" >> $ART
-	echo "date: $TIMDAT `date \"+%H:%M:%S\"`" >> $ART
-	echo "categories:" >> $ART
-	echo "---" >> $ART
+	printf "%s\n" "---" > $ART
+	printf "%s\n" "layout: post" >> $ART
+	printf "%s\n" "title: \"$1\"" >> $ART
+	printf "%s\n" "description: " >> $ART
+	printf "%s\n" "date: $TIMDAT `date \"+%H:%M:%S\"`" >> $ART
+	printf "%s\n" "categories:" >> $ART
+	printf "%s\n" "---" >> $ART
 else
-	echo -e "\033[0;31mDirectory doesn't exist!\033[0m"
-	exit
+	printf "\033[0;31m%s\033[0m\n" "Directory doesn't exist!"
+	exit 1
 fi
 exit

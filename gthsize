@@ -5,24 +5,24 @@
 #   TODO: Add Bitbucket support
 
 usage() {
-	echo "Usage: ${0##*/} [USER] [REPOSITORY]"
-	echo "   [USER] -> Github user"
-	echo -e "   [REPOSITORY] -> Repository owned by previous user\n"
+	printf "%s\n" "Usage: ${0##*/} [USER] [REPOSITORY]"
+	printf "%s\n" "   [USER] -> Github user"
+	printf "%s\n\n" "   [REPOSITORY] -> Repository owned by previous user"
 }
 
 if [ -z "$1" ] || [ "$1" = -h ]; then
 	usage
-	exit
+	exit 1
 fi
 
 if [ ! $# = 2 ]; then
 	usage
-	exit
+	exit 1
 fi
 
 if [ "$1" = "-l" ]; then
 	curl -s https://api.github.com/users/$2/repos | awk '/"name"/ {gsub (/"/,""); gsub (/,/,""); print $2}'
-	exit
+	exit 0
 fi
 
 USER=$1
@@ -30,17 +30,18 @@ REPO=$2
 GET=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ {gsub (/,/,""); print $2}')
 NUMBR=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ {gsub (/,/,""); print $2}' | wc -l)
 
-if [ ! -z $GET ]; then
-		if [ ! $NUMBR = 1 ]; then
+if [ -n "$GET" ]; then
+		if [ "$NUMBR" -ne 1 ]; then
 			unset GET
 			GET=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ && count++ == 1 {gsub (/,/,""); print $2}')
-		elif [ $GET -gt 1024 ]; then
+		elif [ "$GET" -gt 1024 ]; then
 			TOT=$(echo "scale=2; ${GET}/1024" | bc)
-			echo -e "\e[0;32m${TOT}\e[0m Mb"
+			printf "\e[0;32m%.2f\e[0m Mb\n" "${TOT}"
 			exit
 		fi
-	echo -e "\e[0;32m${GET}\e[0m kB"
+	printf "\e[0;32m%d\e[0m kB\n" "${GET}"
 	else
-	echo -e "\e[0;31mGithub repository not found!\e[0m"
+	printf "\e[0;31m%s\e[0m\n" "Github repository not found!"
+	exit 1
 fi
-exit
+exit 0

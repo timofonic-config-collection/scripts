@@ -8,31 +8,31 @@ DIR=755
 
 #List folders or directories which don't have default UNIX permissions
 if [ "$1" = -h ]; then
-	echo "Usage: ${0##*/} [optarg]"
-	echo "Optarg:"
-	echo "   -f			Search for files with different permissions (default)"
-	echo -e "   -d			Search for directories with different permissions\n"
-	exit
+	printf "%s\n" "Usage: ${0##*/} [optarg]"
+	printf "%s\n" "  Optarg:"
+	printf "%s\n" "   -f			Search for files with different permissions (default)"
+	printf "%s\n\n" "   -d			Search for directories with different permissions"
+	exit 1
 fi 
 
 if [ -z "$1" ] || [ "$1" = -f ]; then
-	if [ $(find -type f ! -perm "$FILE" | wc -l) = 0 ]; then
-		echo -e "\e[0;32mNo matches found!\e[0m"
-	elif [ $(find -type f ! -perm "$FILE" | wc -l) -gt 30 ]; then
+	if [ "$(find -type f ! -perm "$FILE" | wc -l)" = 0 ]; then
+		printf "\e[0;32m%s\e[0m\n" "No matches found!"
+	elif [ "$(find -type f ! -perm "$FILE" | wc -l)" -gt 30 ]; then
 		find -type f ! -perm "$FILE" | less
 	else
 		find -type f ! -perm "$FILE"
 	fi
-	exit
+	exit 0
 fi
 
 if [ "$1" = -d ]; then
-	if [ $(find -type d ! -perm "$DIR" | wc -l) = 0 ]; then
-		echo -e "\e[0;32mNo matches found!\e[0m"
-	elif [ $(find -type d ! -perm "$DIR" | wc -l) -gt 30 ]; then
+	if [ "$(find -type d ! -perm "$DIR" | wc -l)" = 0 ]; then
+		printf "\e[0;32m%s\e[0m\n" "No matches found!"
+	elif [ "$(find -type d ! -perm "$DIR" | wc -l)" -gt 30 ]; then
 		find -type d ! -perm "$DIR" | less
 	else
 		find -type d ! -perm "$DIR"
 	fi
-	exit
+	exit 0
 fi

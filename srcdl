@@ -3,16 +3,16 @@
 #   Remove existing pkg / src folders
 
 if [ -d "pkg" ]; then
-	echo -e "\e[0;31mDeleting pkg directory!\e[0m"
+	printf "\e[0;31m%s\e[0m\n" "Deleting pkg directory!"
 	rm -r pkg
 else
-	echo -e "\e[0;32mDirectory pkg not found!\e[0m"
+	printf "\e[0;32m%s\e[0m\n" "Directory pkg not found!"
 fi
 if [ -d "src" ]; then
-	echo -e "\e[0;31mDeleting src directory!\e[0m"
+	printf "\e[0;31m%s\e[0m\n" "Deleting src directory!"
 	rm -rf src
 else
-	echo -e "\e[0;32mDirectory src not found!\e[0m"
+	printf "\e[0;32m%s\e[0m\n" "Directory src not found!"
 fi
 
-exit
+exit 0

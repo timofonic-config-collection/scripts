@@ -1,14 +1,14 @@
 #!/bin/sh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
-cd /mnt/public/REPOS
-
+LOC=/mnt/public/REPOS
 REPS=$(ls -d */)
 DAT=$(date "+%d-%m-%Y")
-DIRD=/mnt/USB1/CONFSAVE
-#DIRD=$HOME/Documents
+#DIRD=/mnt/USB1/CONFSAVE
+DIRD=$HOME/Documents
 NUMBAR=$(find $DIRD -type f -iname "REPOS*.tar.gz" | wc -l)
 
+cd $LOC
 tar -czf "REPOS-$DAT.tar.gz" $REPS
 
 if [ -n "$DIRD" ] && [ -d "$DIRD" ]; then
@@ -17,9 +17,9 @@ if [ -n "$DIRD" ] && [ -d "$DIRD" ]; then
 		rm $FILAST
 	fi
 			mv "REPOS-$DAT.tar.gz" $DIRD
-			echo -e "Saved archive in \e[0;32m$DIRD\e[0m"
+			printf "Saved archive in \e[0;32m%s\e[0m\n" "$DIRD"
 	else
-			echo -e "Saved archive in \e[0;32m/mnt/public/REPOS\e[0m"
+			printf "Saved archive in \e[0;32m%s\e[0m\n" "$LOC"
 fi
 
-exit
+exit 0

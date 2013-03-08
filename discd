@@ -8,6 +8,6 @@ TIME=$(date '+%R')
 #APM=$(/usr/sbin/hdparm -I /dev/sda | grep 'Advanced power')
 PCC=$(/usr/sbin/smartctl -A /dev/sda | grep -i 'Load_Cycle_Count')
 
-echo -e "--> $DATE | $TIME <--"
-echo -e "$PCC\n"
-exit
+printf "%s\n" "--> $DATE | $TIME <--"
+printf "%s\n\n" "$PCC"
+exit 0
