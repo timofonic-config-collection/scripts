@@ -1,5 +1,6 @@
 #!/bin/sh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   Query PKGBUILD online
 
 usage() {
 	printf "%s\n" "Usage: ${0##*/} [OPTARG]"
