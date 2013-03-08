@@ -24,7 +24,7 @@ DIR=$HOME/Documents/test
 TARGZ=1
 
 usage() {
-	printf "%s\n" "Usage: ${0##*/} [OPTARG]\n"
+	printf "%s\n" "Usage: ${0##*/} [OPTARG]"
 	printf "%s\n" "  OPTARG:"
 	printf "%s\n\n" "    -o 	Overwrite existing tar.gz archive or directory"
 }
