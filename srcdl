@@ -2,15 +2,37 @@
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 #   Remove existing pkg / src folders
 
+ask () {
+while true; do
+	printf "%s" "Do you want to delete $DIR ? [Y/n] "
+	read yn
+	case $yn in
+		[Yy])
+				printf "\e[0;31m%s\e[0m\n" "Deleting $DIR directory!"
+				rm -r "$DIR"
+				break
+				;;
+		[Nn])
+				break
+				;;
+		* )
+				printf "%s\n" "Please answer yes or no!"
+				;;
+	esac
+done
+}
+
 if [ -d "pkg" ]; then
-	printf "\e[0;31m%s\e[0m\n" "Deleting pkg directory!"
-	rm -r pkg
+	DIR=pkg
+	printf "\e[0;33m%s\e[0m\n" "$DIR directory exists"
+	ask
 else
 	printf "\e[0;32m%s\e[0m\n" "Directory pkg not found!"
 fi
 if [ -d "src" ]; then
-	printf "\e[0;31m%s\e[0m\n" "Deleting src directory!"
-	rm -rf src
+	DIR=src
+	printf "\e[0;33m%s\e[0m\n" "$DIR directory exists"
+	ask
 else
 	printf "\e[0;32m%s\e[0m\n" "Directory src not found!"
 fi
