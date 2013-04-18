@@ -12,7 +12,7 @@ if [ -z "$1" ] || [ "$1" = "-h" ]; then
 fi
 
 # Generate page
-if [ "$1" = "-p" ] && [ -n "$2" ]; then
+if [ "$1" = "-p" ] && [ "$#" -eq 2 ]; then
 	NEWFOL=$(echo "$2" | awk '{print tolower($_)}')
 	mkdir -p "$DIR/$NEWFOL" && cd "$DIR/$NEWFOL"
 	printf "\033[0;33m%s\033[0m\n" "You may rename the folder!"
