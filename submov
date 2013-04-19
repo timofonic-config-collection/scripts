@@ -7,9 +7,9 @@ if [ "$#" -ne 2 ]; then
 fi
 
 MOVNAME="${1%%.*}"
-SRTNAME="${2##*.}"
+SRTEXTE="${2##*.}"
 
-if [ "$SRTNAME" = "srt" ]; then
+if [ "$SRTEXTE" = "srt" ]; then
 	mv "$2" "$MOVNAME".srt
 else
 	printf "\e[0;31m%s\e[0m\n" "Wrong file extension!"
