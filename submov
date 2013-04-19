@@ -1,0 +1,18 @@
+#!/bin/sh
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+if [ "$#" -ne 2 ]; then
+	printf "%s\n" "Usage: ${0##*/} <movie_file> <subtitles_file>"
+	exit 1
+fi
+
+MOVNAME="${1%%.*}"
+SRTNAME="${2##*.}"
+
+if [ "$SRTNAME" = "srt" ]; then
+	mv "$2" "$MOVNAME".srt
+else
+	printf "\e[0;31m%s\e[0m\n" "Wrong file extension!"
+	exit 1
+fi
+exit 0
