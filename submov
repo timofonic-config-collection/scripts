@@ -1,4 +1,4 @@
-#!/bin/mksh
+#!/bin/sh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 if [ "$#" -ne 2 ]; then
