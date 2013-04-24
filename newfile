@@ -1,0 +1,31 @@
+#!/bin/mksh
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+if [[ -z $1 && $# -ne 2 ]]; then
+    print "Usage: ${0##*/} <package_name> <package_file>"
+    exit 1
+fi
+
+URLM="https://projects.archlinux.org/svntogit/packages.git/plain/trunk/$2?h=packages/$1"
+URLC="https://projects.archlinux.org/svntogit/community.git/plain/trunk/$2?h=packages/$1"
+
+if [[ -z $(curl -s $URLM | awk '/\<head\>/') ]]; then
+    if [[ -r $2 ]]; then
+        curl -s "$URLM" -o "$2".NEW
+    else
+        curl -s "$URLM" -o "$2"
+    fi
+else
+    if [[ -z $(curl -s $URLC | awk '/\<head\>/') ]]; then
+        if [[ -r $2 ]]; then
+        curl -s "$URLC" -o "$2".NEW
+    else
+        curl -s "$URLC" -o "$2"
+        fi
+    else
+        print "Package not found!"
+        exit 1
+    fi
+fi
+
+exit 0
