@@ -1,0 +1,25 @@
+#!/bin/sh
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+SCRPT="srvchk submov"
+URLGIT="https://raw.github.com/Ypnose/Scripts/master"
+LOC=$HOME/.bin
+TEMPF=$(mktemp)
+
+for PRGRM in $SCRPT
+	do
+		if [ -x "$LOC/$PRGRM" ]; then
+			curl -s "$URLGIT/$PRGRM" -o "$TEMPF"
+			if [ -n "$(diff -u $LOC/$PRGRM $TEMPF)" ]; then
+				cd "$LOC"
+				cp "$TEMPF" "$PRGRM"
+				printf "%s\n" "Updated $PRGRM"
+			else
+				printf "%s\n" "Already have the latest \"$PRGRM\" version!"
+			fi
+		else
+			printf "%s\n" "Script is missing"
+		fi
+done
+
+exit 0

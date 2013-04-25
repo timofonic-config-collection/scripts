@@ -5,9 +5,9 @@
 HDP=$(sudo hdparm -I /dev/sda | awk '/Advanced power/ {print $5}')
 if [ -x "/sbin/hdparm" ]; then
 	if [ "$HDP" = "254" ]; then
-		printf "\e[0;32m%d\e[0m\n" "$HDP"
+		printf "\e[0;32m%d\e[0m\n" " $HDP"
 	else
-		printf "\e[0;31m%d\e[0m\n" "$HDP"
+		printf "\e[0;31m%d\e[0m\n" " $HDP"
 	fi
 else
 	printf "%s\n" "Hdparm is not installed!"
@@ -17,22 +17,22 @@ fi
 PWM=$(cat /sys/class/drm/card0/device/power_method)
 PWP=$(cat /sys/class/drm/card0/device/power_profile)
 if [ "$PWM" = "profile" ]; then
-	printf "\e[0;32m%s\e[0m\n" "$PWM"
+	printf "\e[0;32m%s\e[0m\n" " $PWM"
 else
-	printf "\e[0;31m%s\e[0m\n" "$PWM"
+	printf "\e[0;31m%s\e[0m\n" " $PWM"
 fi
 if [ "$PWP" = "mid" ]; then
-	printf "\e[0;32m%s\e[0m\n" "$PWP"
+	printf "\e[0;32m%s\e[0m\n" " $PWP"
 else
-	printf "\e[0;31m%s\e[0m\n" "$PWP"
+	printf "\e[0;31m%s\e[0m\n" " $PWP"
 fi
 
 # VALUE = 0
 NMI=$(cat /proc/sys/kernel/nmi_watchdog)
 if [ "$NMI" = 0 ]; then
-	printf "\e[0;32m%d\e[0m\n" "$NMI"
+	printf "\e[0;32m%d\e[0m\n" " $NMI"
 else
-	printf "\e[0;31m%d\e[0m\n" "$NMI"
+	printf "\e[0;31m%d\e[0m\n" " $NMI"
 fi
 
 exit
