@@ -1,44 +1,45 @@
-#!/bin/sh
+#!/bin/mksh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 #   Generate "ready-to-write" Jekyll posts & pages.
 
 DIR=/mnt/public/REPOS/JekyBlog
 
-if [ -z "$1" ] || [ "$1" = "-h" ]; then
-	printf "%s\n" "Usage: ${0##*/} [OPTARG]"
-	printf "%s\n" "     :OPTARG"
-	printf "%s\n\n" "    -p 	Create a new page instead of a new post/article"
+if [[ -z $1 || $1 = -h ]]; then
+	print "Usage: ${0##*/} [-p page_name]"
+	print "    -p 	Create a new page instead of a new post/article"
 	exit 1
 fi
 
 # Generate page
-if [ "$1" = "-p" ] && [ "$#" -eq 2 ]; then
-	NEWFOL=$(echo "$2" | awk '{print tolower($_)}')
+if (( $# == 2 )) && [[ $1 = -p ]]; then
+	NEWFOL="$2"
+	typeset -l NEWFOL
 	mkdir -p "$DIR/$NEWFOL" && cd "$DIR/$NEWFOL"
-	printf "\033[0;33m%s\033[0m\n" "You may rename the folder!"
-	printf "%s\n" "---" > index.markdown
-	printf "%s\n" "layout: page" >> index.markdown
-	printf "%s\n" "title: \"$2\"" >> index.markdown
-	printf "%s\n" "---" >> index.markdown
+	print "\033[0;33mYou may rename the folder!\033[0m"
+	print "--" "---" > index.markdown
+	print "layout: page" >> index.markdown
+	print "title: \"$2\"" >> index.markdown
+	print "--" "---" >> index.markdown
 	exit 0
 fi
 
 # Generate post
 TIMDAT=$(date "+%Y-%m-%d")
-NAME=$(echo "$1" | awk '{gsub (/ /,"-");print tolower($_)}')
+NAME=${1// /-}
+typeset -l NAME
 ART="$TIMDAT-$NAME.markdown"
 
-if [ -d "$DIR/_posts" ]; then
+if [[ -d $DIR/_posts ]]; then
 	cd "$DIR/_posts"
-	printf "%s\n" "---" > $ART
-	printf "%s\n" "layout: post" >> $ART
-	printf "%s\n" "title: \"$1\"" >> $ART
-	printf "%s\n" "description: " >> $ART
-	printf "%s\n" "date: $TIMDAT `date \"+%H:%M:%S\"`" >> $ART
-	printf "%s\n" "categories:" >> $ART
-	printf "%s\n" "---" >> $ART
+	print "--" "---" > $ART
+	print "layout: post" >> $ART
+	print "title: \"$1\"" >> $ART
+	print "date: $TIMDAT `date \"+%H:%M:%S\"`" >> $ART
+	print "description: " >> $ART
+	print "categories:" >> $ART
+	print "--" "---" >> $ART
 else
-	printf "\033[0;31m%s\033[0m\n" "Directory doesn't exist!"
+	print "\033[0;31mDirectory doesn't exist!\033[0m"
 	exit 1
 fi
-exit
+exit 0

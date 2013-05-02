@@ -1,0 +1,8 @@
+#!/bin/mksh
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+DIR="/mnt/public/REPOS/JekyBlog"
+
+cd $DIR
+jekyll --auto --server
+exit 0
