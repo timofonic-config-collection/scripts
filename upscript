@@ -1,10 +1,10 @@
 #!/bin/sh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
-SCRPT="srvchk submov"
+SCRPT="upscript srvchk submov cleandos"
 URLGIT="https://raw.github.com/Ypnose/Scripts/master"
-LOC=$HOME/.bin
 TEMPF=$(mktemp)
+LOC=$HOME/.bin
 
 for PRGRM in $SCRPT
 	do
