@@ -1,47 +1,45 @@
-#!/bin/sh
+#!/bin/mksh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-#   IMPORTANT!!! Do not spam it, because you'll reach API Rate Limit!
+#   IMPORTANT!!! Do not spam it, because you'll reach API Rate Limit and you'll be banned!
 #   You need bc calculator
 #   TODO: Add Bitbucket support
 
-usage() {
-	printf "%s\n" "Usage: ${0##*/} [USER] [REPOSITORY]"
-	printf "%s\n" "   [USER] -> Github user"
-	printf "%s\n\n" "   [REPOSITORY] -> Repository owned by previous user"
+SOFT=${0##*/}
+
+function usage {
+	print "Usage: $SOFT [-l] [USER] [REPOSITORY]"
+	print  "   -l   List repos"
+	print  "   USER -> Github user"
+	print  "   REPOSITORY -> Repository owned by previous user"
 }
 
-if [ -z "$1" ] || [ "$1" = -h ]; then
+if [[ -z $1 || $1 = -h ]]; then
 	usage
 	exit 1
-fi
-
-if [ ! $# = 2 ]; then
-	usage
-	exit 1
-fi
-
-if [ "$1" = "-l" ]; then
-	curl -s https://api.github.com/users/$2/repos | awk '/"name"/ {gsub (/"/,""); gsub (/,/,""); print $2}'
+elif [[ $1 = -l ]]; then
+	CHX="$2"
+	GITUSER="${CHX:=Ypnose}"
+	curl -s https://api.github.com/users/$GITUSER/repos | awk '/"name"/ {gsub (/"|,/,""); print $2}'
 	exit 0
 fi
 
-USER=$1
-REPO=$2
-GET=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ {gsub (/,/,""); print $2}')
-NUMBR=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ {gsub (/,/,""); print $2}' | wc -l)
-
-if [ -n "$GET" ]; then
-		if [ "$NUMBR" -ne 1 ]; then
-			unset GET
-			GET=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ && count++ == 1 {gsub (/,/,""); print $2}')
-		elif [ "$GET" -gt 1024 ]; then
-			TOT=$(echo "scale=2; ${GET}/1024" | bc)
-			printf "\e[0;32m%.2f\e[0m Mb\n" "${TOT}"
-			exit
-		fi
-	printf "\e[0;32m%d\e[0m kB\n" "${GET}"
+if (( $# == 2 )); then
+	TEMPF=$(mktemp)
+	curl -s https://api.github.com/repos/"$1"/"$2" -o "$TEMPF"
+	GET=$(awk '/"size"/ {gsub (/,/,""); print $2}' "$TEMPF")
+	NUMBR=$(awk '{while (gsub(/"size"/,""))x++} END{print x}' "$TEMPF")
+	if [[ -n $GET ]]; then
+			if (( $NUMBR != 1 )); then
+				unset GET
+				GET=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ && x==0 {gsub (/,/,""); if(x=1) print $2;exit}')
+			elif (( $GET >= 1024 )) && [[ -x /usr/bin/bc ]]; then
+				TOT=$(print "scale=2; ${GET}/1024" | bc)
+				print "\e[0;32m$TOT\e[0m Mb"
+			fi
+		print "\e[0;32m$GET\e[0m kB"
 	else
-	printf "\e[0;31m%s\e[0m\n" "Github repository not found!"
-	exit 1
+		print "\e[0;31mGithub repository not found!\e[0m"
+		exit 1
+	fi
 fi
 exit 0
