@@ -32,7 +32,8 @@ if (( $# == 2 )); then
 			if (( $NUMBR != 1 )); then
 				unset GET
 				GET=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ && x==0 {gsub (/,/,""); if(x=1) print $2;exit}')
-			elif (( $GET >= 1024 )) && [[ -x /usr/bin/bc ]]; then
+			fi
+			if (( $GET >= 1024 )) && [[ -x /usr/bin/bc ]]; then
 				TOT=$(print "scale=2; ${GET}/1024" | bc)
 				print "\e[0;32m$TOT\e[0m Mb"
 			fi
