@@ -1,13 +1,14 @@
 #!/bin/sh
-# Based on those lines: http://linuxwireless.org/en/users/Drivers/b43#Other_distributions_not_mentioned_above
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   Based on those lines: http://linuxwireless.org/en/users/Drivers/b43#Other_distributions_not_mentioned_above
 
 FIRMWARE_INSTALL_DIR="/lib/firmware"
 
-wget http://www.lwfinger.com/b43-firmware/broadcom-wl-5.100.138.tar.bz2
+curl -O http://www.lwfinger.com/b43-firmware/broadcom-wl-5.100.138.tar.bz2
 tar xjf broadcom-wl-5.100.138.tar.bz2
 sudo b43-fwcutter -w "$FIRMWARE_INSTALL_DIR" broadcom-wl-5.100.138/linux/wl_apsta.o
 
 # UNIX folder permissions
 sudo chmod 755 "$FIRMWARE_INSTALL_DIR"/b43
 
-exit
+exit 0
