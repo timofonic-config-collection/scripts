@@ -20,12 +20,10 @@ extfirm() {
 	sudo chmod 755 "$FIRMWARE_INSTALL_DIR"/b43
 }
 
-if [ "$1" = "-d" ]; then
+if [ "$1" = "-d" ]; then
 	dlfirm
-	exit 0
 elif [ "$1" = "-e" ]; then
 	extfirm
-	exit 0
 fi
 
 dlfirm
