@@ -1,4 +1,4 @@
 Scripts
 =======
 
-Scripts I use everyday (located to ~/.bin)
+Scripts I use everyday (located to ```$HOME/.bin```)

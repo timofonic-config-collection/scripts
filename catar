@@ -1,13 +1,13 @@
-#!/bin/sh
+#!/usr/bin/mksh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
-if [ ! $# = 2 ]; then
-	printf "%s\n" "Usage: ${0##*/} <archive_name> <filename>"
-	exit
+if (( $# != 2 )); then
+	printf "%s\n" "Usage: ${0##*/} [archive_name] [filename]"
+	exit 1
 fi
 
 catar() {
-	if [ -f $1 ]; then
+	if [[ -f $1 ]]; then
 		case $1 in
 			*.tar) tar -tf $1 $2 ;;
 			*.tar.bz2) tar -jtf $1 $2 ;;
