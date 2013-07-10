@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/mksh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 #   This script lists tar.xz packages
 
@@ -13,14 +13,14 @@ while true; do
 	printf "%s" "Would you like to list these packages ? [Y/n] "
 	read yn
 	case $yn in
-		[Yy]* )
+		[Yy]*)
 				find -type f -iname "*.pkg.tar.xz" -printf '\033[32m%f\033[0m ==> \033[33m%h\033[0m\n'
 				exit 0
 				;;
-		[Nn]* )
+		[Nn]*)
 				exit 0
 				;;
-		* )
+		*)
 				printf "%s\n" "Please answer yes or no!"
 				;;
 	esac

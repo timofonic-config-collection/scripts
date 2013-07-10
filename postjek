@@ -1,10 +1,10 @@
-#!/bin/mksh
+#!/usr/bin/mksh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 #   Generate "ready-to-write" Jekyll posts & pages.
 
-DIR=/mnt/public/REPOS/JekyBlog
+DIR=/$HOME/Repos/JekyBlog
 
-if [[ -z $1 || $1 = -h ]]; then
+if [[ -z $1 || $1 = "-h" ]]; then
 	print "Usage: ${0##*/} [-p page_name]"
 	print "    -p 	Create a new page instead of a new post/article"
 	exit 1
@@ -29,8 +29,8 @@ NAME=${1// /-}
 typeset -l NAME
 ART="$TIMDAT-$NAME.markdown"
 
-if [[ -d $DIR/_posts ]]; then
-	cd "$DIR/_posts"
+if [[ -d $DIR/_drafts ]]; then
+	cd "$DIR/_drafts"
 	print "--" "---" > $ART
 	print "layout: post" >> $ART
 	print "title: \"$1\"" >> $ART

@@ -2,6 +2,8 @@
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 #   HDD daemon
 
+# TODO: REWORK THIS SCRIPT!!!
+
 DATE=$(date '+%A %d %B')
 TIME=$(date '+%R')
 # Not supported by Desktop

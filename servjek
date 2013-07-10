@@ -1,8 +1,8 @@
-#!/bin/mksh
+#!/usr/bin/mksh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
-DIR="/mnt/public/REPOS/JekyBlog"
+DIR=$HOME/Repos/JekyBlog
 
 cd $DIR
-jekyll --auto --server
+jekyll serve --watch --drafts
 exit 0

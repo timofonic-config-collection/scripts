@@ -1,11 +1,12 @@
-#!/bin/sh
+#!/usr/bin/mksh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 awk '/(pacman)|(makepkg)/ {
-		gsub (/alias/, "\033[1;36malias\033[0m");
-		gsub (/pacman/, "\033[1;34mpacman\033[0m");
-		gsub (/-color/, "\033[1;32m-color\033[0m");
-		gsub (/grep/, "\033[0,31mgrep\033[0m");
-		gsub (/makepkg/, "\033[0;36mmakepkg\033[0m");
-		print }' $HOME/.bashrc
-exit
+	gsub (/alias/, "\033[1;36malias\033[0m");
+	gsub (/pacman/, "\033[1;34mpacman\033[0m");
+	gsub (/-color/, "\033[1;32m-color\033[0m");
+	gsub (/--asdeps/, "\033[0,31m--asdeps\033[0m");
+	gsub (/grep/, "\033[0,31mgrep\033[0m");
+	gsub (/makepkg/, "\033[0;36mmakepkg\033[0m");
+	print
+}' $HOME/.aliases

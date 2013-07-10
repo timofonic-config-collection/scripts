@@ -5,38 +5,40 @@
 THU=$(find -type f -iname "Thumbs.db" | wc -l)
 DES=$(find -type f -iname "desktop.ini" | wc -l)
 DIR=$(find -type f -iname ".directory" | wc -l)
+DF=$(tput sgr0)
+RD=$(tput setaf 1)
+GR=$(tput setaf 2)
 
 if [ "$THU" != 0 ]; then
-	printf "You have \e[0;31m%d\e[0m Thumbs.db\n" "$THU"
+	printf "You have $RD%d$DF Thumbs.db\n" "$THU"
 fi
 
 if [ "$DES" != 0 ]; then
-	printf "You have \e[0;31m%d\e[0m desktop.ini\n" "$DES"
+	printf "You have $RD%d$DF desktop.ini\n" "$DES"
 fi
 
 if [ "$DIR" != 0 ]; then
-	printf "You have \e[0;31m%d\e[0m .directory\n" "$DIR"
+	printf "You have $RD%d$DF .directory\n" "$DIR"
 fi
 
 if [ -z "$(find -type f -iname 'Thumbs.db')" ]; then
-	printf "\e[0;32m%s\e[0m\n" "No Thumbs.db file has been detected"
+	printf "$GR%s$DF\n" "No Thumbs.db file has been detected"
 else 
 	find -type f -iname "Thumbs.db" | sed 's/./\\&/g' | xargs rm
-	printf "\e[0;31m%s\e[0m\n" "All Thumbs.db files found have been successfully deleted"
+	printf "$RD%s$DF\n" "All Thumbs.db files found have been successfully deleted"
 fi
 
 if [ -z "$(find -type f -iname 'desktop.ini*')" ]; then
-	printf "\e[0;32m%s\e[0m\n" "No desktop.ini file has been detected"
+	printf "$GR%s$DF\n" "No desktop.ini file has been detected"
 else 
 	find -type f -iname "desktop.ini*" | sed 's/./\\&/g' | xargs rm
-	printf "\e[0;31m%s\e[0m\n" "All desktop.ini files found have been successfully deleted"
+	printf "$RD%s$DF\n" "All desktop.ini files found have been successfully deleted"
 fi
 
 if [ -z "$(find -type f -iname '.directory')" ]; then
-	printf "\e[0;32m%s\e[0m\n" "No .directory file has been detected"
+	printf "$GR%s$DF\n" "No .directory file has been detected"
 else 
 	find -type f -iname ".directory*" | sed 's/./\\&/g' | xargs rm
-	printf "\e[0;31m%s\e[0m\n" "All .directory files found have been successfully deleted"
+	printf "$RD%s$DF\n" "All .directory files found have been successfully deleted"
 fi
-printf "\e[0;36m%s\e[0m\n" "Done"
 exit

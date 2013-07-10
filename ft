@@ -1,4 +1,5 @@
-#!/bin/mksh
-cd $HOME/.fonts
-mkfontdir && xset fp rehash
+#!/usr/bin/mksh
+cd $HOME/.fonts/bitmaps
+mkfontdir
+xset fp rehash
 exit 0

@@ -3,8 +3,8 @@
 
 SCRPT="upscript srvchk submov cleandos"
 URLGIT="https://raw.github.com/Ypnose/Scripts/master"
-TEMPF=$(mktemp)
-LOC=$HOME/.bin
+TEMPF="$(mktemp)"
+LOC="HOME/.bin"
 
 for PRGRM in $SCRPT
 	do
@@ -21,5 +21,4 @@ for PRGRM in $SCRPT
 			printf "%s\n" "Script is missing"
 		fi
 done
-
 exit 0

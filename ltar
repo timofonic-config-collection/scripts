@@ -1,26 +1,28 @@
-#!/bin/sh
+#!/usr/bin/mksh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 #   List archive content
 
-listar() {
-	if [ -f $1 ]; then
+function listar {
+	if [[ -f $1 ]]; then
 		case $1 in
-			*.tar) tar -tf $1 ;;
-			*.tar.bz2) tar -jtf $1 ;;
-			*.tar.gz) tar -ztf $1 ;;
-			*.tar.xz) tar -Jtf $1 ;;
-			*.rar) unrar l $1 ;;
-			*.zip) unzip -l $1 ;;
+			*.tar) tar -tf "$1" ;;
+			*.tar.bz2) tar -jtf "$1" ;;
+			*.tar.gz) tar -ztf "$1" ;;
+			*.tar.xz) tar -Jtf "$1" ;;
+			*.tgz) tar -ztf "$1" ;;
+			*.rar) bsdtar -tf "$1" ;;
+			*.zip) bsdtar -tf "$1" ;;
+			*) print "Unknown archive extension!" ; exit 1 ;;
 		esac
 	else
-		printf "%s\n" "FOO"
+		print "File doesn't exist!"
 	fi
 }
 
-if [ "$(listar $1 | wc -l)" -gt 40 ]; then
+if (( $(listar $1 | wc -l) > 40 )); then
 	listar $1 | less
 else
 	listar $1
 fi
 
-exit
+exit 0

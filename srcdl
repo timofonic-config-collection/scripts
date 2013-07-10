@@ -1,25 +1,25 @@
-#!/bin/mksh
+#!/usr/bin/mksh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 #   Remove existing pkg / src folders
 
 function ask {
-while true; do
-	print "Do you want to delete $DIR ? [Y/n] "
-	read -r yn
-	case $yn in
-		[Yy])
-				print "\e[0;31mDeleting $DIR directory!\e[0m"
-				rm -r "$DIR"
-				break
-				;;
-		[Nn])
-				break
-				;;
-		*)
-				print "Please answer yes or no!"
-				;;
-	esac
-done
+	while true; do
+		print "Do you want to delete $DIR ? [Y/n] "
+		read -r yn
+		case $yn in
+			[Yy])
+					print "\e[0;31mDeleting $DIR directory!\e[0m"
+					rm -r "$DIR"
+					break
+					;;
+			[Nn])
+					break
+					;;
+			*)
+					print "Please answer yes or no!"
+					;;
+		esac
+	done
 }
 
 if [[ -d pkg ]]; then

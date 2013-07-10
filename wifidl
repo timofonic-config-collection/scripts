@@ -14,6 +14,7 @@ dlfirm() {
 }
 
 extfirm() {
+	#DRN="${}"
 	tar xjf broadcom-wl-5.100.138.tar.bz2
 	sudo b43-fwcutter -w "$FIRMWARE_INSTALL_DIR" broadcom-wl-5.100.138/linux/wl_apsta.o
 	# UNIX folder permissions
@@ -25,5 +26,3 @@ case "$1" in
 	-e) extfirm; exit 0 ;;
 	*) dlfirm; extfirm; exit ;;
 esac
-
-exit 0
