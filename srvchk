@@ -28,7 +28,7 @@ fi
 if [ "$PWP" = "low" ]; then
 	printf "$GR%s$DF\n" "$PWP"
 else
-	printf "\$RD%s$DF\n" "$PWP"
+	printf "$RD%s$DF\n" "$PWP"
 fi
 
 exit
