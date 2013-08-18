@@ -1,0 +1,113 @@
+#!/usr/bin/mksh
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+#set -x
+CHDEST="/home/y/Builds/ARCH-CHROOT"
+AUTHF="/home/y/.Xauthority"
+
+if [[ -z $CHDEST ]]; then
+	print "error: chroot directory isn't set!" >&2
+	exit 1
+fi
+
+function usage {
+	print MEUH
+}
+
+function test_user {
+}
+
+function test_chroot {
+	if [[ ! -f ${CHDEST}/etc/os-release ]]; then
+		print "=> ERROR: chroot doesn't exist" >&2
+		exit 1
+	fi
+}
+
+function create_chroot {
+	if [[ ! -d $CHDEST ]]; then
+		print "=> Creating a new chroot in ${CHDEST}"
+		mkdir -p ${CHDEST}/var/{cache/pacman/pkg,lib/pacman}
+	elif [[ -d $CHDEST && -f ${CHDEST}/etc/os-release ]]; then
+		print "=> ERROR: an existing chroot already exists" >&2
+		exit 1
+	fi
+	pacman -r "$CHDEST" -Syyuu bash bzip2 coreutils diffutils file filesystem findutils gawk \
+	gcc-libs gettext glibc grep gzip less logrotate pacman perl procps-ng psmisc sed shadow sysfsutils tar texinfo vi which
+	RET=$?
+	if (( RET == 0 )); then
+		print "=> Packages succesfully installed"
+	else
+		print "=> ERROR: an error occurred" >&2
+		exit 1
+	fi
+	cat >> ${CHDEST}/root/.bashrc <<- EOF
+	PS1='\e[31m(chroot)\e[0m [\u@\h \W]\$ '
+	export DISPLAY=:0
+	export XAUTHORITY=/root/.Xauthority
+	alias c='clear'
+	EOF
+	cat <<-EOF
+	=> You should probably create a regular user, instead of using root!
+	   # useradd -g users -m -s /bin/bash <user>
+	EOF
+}
+
+function rm_chroot {
+	TIM=5
+	[[ ! -d $CHDEST ]] && print "=> ERROR: chroot doesn't exist" >&2 && exit 1
+	print "=> Removing chroot in ${TIM} seconds..."
+	sleep "$TIM"
+	rm -r "$CHDEST"
+}
+
+function mount_part {
+	print "=> Mouting partitions..."
+	mount -t proc proc ${CHDEST}/proc
+	mount -t sysfs sys ${CHDEST}/sys
+	mount -o bind /dev ${CHDEST}/dev
+	#mount -t devpts pts ${CHDEST}/dev/pts/
+	mount -o bind /tmp ${CHDEST}/tmp
+	print "=> Partitions mounted"
+}
+
+function umount_part {
+	#umount ${CHDEST}/{proc,sys,dev/pts,dev,tmp}
+	umount ${CHDEST}/{proc,sys,dev,tmp}
+}
+
+function go_chroot {
+	print "=> Exporting host configs to chroot..."
+	cp /etc/resolv.conf ${CHDEST}/etc/resolv.conf
+	cp /etc/pacman.d/mirrorlist ${CHDEST}/etc/pacman.d/mirrorlist
+	[[ ! -d ${CHDEST}/usr/share/terminfo/r/ ]] && mkdir -p ${CHDEST}/usr/share/terminfo/r/
+	cp /usr/share/terminfo/r/rxvt* ${CHDEST}/usr/share/terminfo/r/
+	cp ${AUTHF} ${CHDEST}/root/.Xauthority
+	print "=> Starting chroot"
+	#CHUSER="ypntest"
+	chroot ${CHUSER:+--userspec="$CHUSER"} "$CHDEST" /bin/bash
+}
+
+function pac_install {
+	pacman -r "$CHDEST"
+}
+
+while getopts "cehi:r" option
+do
+	case $option in
+		c) create_chroot
+		   ;;
+		e) test_chroot
+		   mount_part
+		   go_chroot
+		   umount_part
+		   ;;
+		h) usage
+		   exit 1
+		   ;;
+		i) pac_install
+		   ;;
+		r) rm_chroot
+		   ;;
+	esac
+done
