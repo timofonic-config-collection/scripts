@@ -11,10 +11,22 @@ if [[ -z $CHDEST ]]; then
 fi
 
 function usage {
-	print MEUH
+	cat <<- EOF
+	usage: ywrap [-cehr]
+	options:
+	   -c        Create a new chroot
+	   -e        Enter in the existing chroot
+	   -h        Display this help
+	   -r        Remove an existing chroot
+	EOF
 }
 
 function test_user {
+	# DON'T TELL ME I SHOULD USE EUID, SINCE IT DOESN'T EXIST IN KSH!
+	if (( $(id -u) != 0 )); then
+		print "=> ERROR: You must run this script as root!" >&2
+		exit 1
+	fi
 }
 
 function test_chroot {
@@ -35,7 +47,7 @@ function create_chroot {
 	pacman -r "$CHDEST" -Syyuu bash bzip2 coreutils diffutils file filesystem findutils gawk \
 	gcc-libs gettext glibc grep gzip less logrotate pacman perl procps-ng psmisc sed shadow sysfsutils tar texinfo vi which
 	RET=$?
-	if (( RET == 0 )); then
+	if (( $RET == 0 )); then
 		print "=> Packages succesfully installed"
 	else
 		print "=> ERROR: an error occurred" >&2
@@ -95,9 +107,11 @@ function pac_install {
 while getopts "cehi:r" option
 do
 	case $option in
-		c) create_chroot
+		c) test_user
+		   create_chroot
 		   ;;
-		e) test_chroot
+		e) test_user
+		   test_chroot
 		   mount_part
 		   go_chroot
 		   umount_part
@@ -107,7 +121,12 @@ do
 		   ;;
 		i) pac_install
 		   ;;
-		r) rm_chroot
+		r) test_user
+		   rm_chroot
+		   ;;
+		?) print "Invalid option: -$OPTARG"
+		   usage
+		   exit 1
 		   ;;
 	esac
 done
