@@ -21,7 +21,7 @@ SRTEXT="${2##*.}"
 mv "$MOVNAM"."$MOVEXT" "$MOVFIL"."$MOVEXT"
 
 if [ "$SRTEXT" = "srt" ]; then
-	mv "$2" "$MOVFIL".srt
+	mv "$2" ${MOVFIL}.srt
 	printf "$GR%s$DF\n" "Done"
 else
 	printf "$RD%$DF\n" "Wrong file extension!"

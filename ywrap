@@ -1,6 +1,22 @@
 #!/usr/bin/mksh
 #   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#  
+
 #set -x
 CHDEST="/home/y/Builds/ARCH-CHROOT"
 AUTHF="/home/y/.Xauthority"
@@ -12,12 +28,13 @@ fi
 
 function usage {
 	cat <<- EOF
-	usage: ywrap [-cehr]
+	usage: ywrap -[cehrS]
 	options:
 	   -c        Create a new chroot
 	   -e        Enter in the existing chroot
 	   -h        Display this help
 	   -r        Remove an existing chroot
+	   -S        Install pkg(s) in the existing chroot
 	EOF
 }
 
@@ -94,17 +111,23 @@ function go_chroot {
 	cp /etc/pacman.d/mirrorlist ${CHDEST}/etc/pacman.d/mirrorlist
 	[[ ! -d ${CHDEST}/usr/share/terminfo/r/ ]] && mkdir -p ${CHDEST}/usr/share/terminfo/r/
 	cp /usr/share/terminfo/r/rxvt* ${CHDEST}/usr/share/terminfo/r/
-	cp ${AUTHF} ${CHDEST}/root/.Xauthority
+	[[ -f $AUTHF ]] && cp ${AUTHF} ${CHDEST}/root/.Xauthority
 	print "=> Starting chroot"
 	#CHUSER="ypntest"
 	chroot ${CHUSER:+--userspec="$CHUSER"} "$CHDEST" /bin/bash
 }
 
 function pac_install {
-	pacman -r "$CHDEST"
+	print "Installing package(s) in $CHDEST"
+	pacman -r "$CHDEST" -Syu "$OPTARG"
 }
 
-while getopts "cehi:r" option
+if [[ -z $1 ]]; then
+	usage
+	exit 1
+fi
+
+while getopts ":cehi:rS:" option
 do
 	case $option in
 		c) test_user
@@ -123,6 +146,13 @@ do
 		   ;;
 		r) test_user
 		   rm_chroot
+		   ;;
+		S) test_user
+		   test_chroot
+		   pac_install
+		   ;;
+		:) print "Option -$OPTARG requires an argument."
+		   exit 1
 		   ;;
 		?) print "Invalid option: -$OPTARG"
 		   usage
