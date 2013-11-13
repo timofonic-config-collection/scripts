@@ -1,0 +1,37 @@
+#!/usr/bin/ruby
+# Initial script from http://onestepback.org/index.cgi/Tech/Ruby/WEBrick.rdoc
+# Ypnose hacked it
+
+require 'webrick'
+include WEBrick
+
+d = ARGV[0]
+
+if ARGV.length > 1
+	abort "usage: tinyserv [pwd]"
+elsif ARGV.length == 1
+	if File.directory?("#{d}")
+		Dir.chdir "#{d}"
+		dir = Dir.pwd
+		puts "Starting server in #{dir}"
+	else
+		abort "Directory doesn't exist!"
+	end
+else
+	dir = Dir.pwd
+end
+
+port = 12000 + (dir.hash % 1000)
+serv = "http://127.0.0.1:#{port}"
+#browser = "firefox"
+
+puts "URL: #{serv}"
+
+s = HTTPServer.new(
+	:Port            => port,
+	:DocumentRoot    => dir
+)
+
+#system( "#{browser} #{serv}" )
+trap("INT"){ s.shutdown }
+s.start
