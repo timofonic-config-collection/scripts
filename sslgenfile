@@ -1,0 +1,47 @@
+#!/usr/bin/mksh
+#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#   You need openssl & ca-certificates in order to use this script
+
+FCRT="$HOME/cert.pem"
+SRCRT="/usr/share/ca-certificates/mozilla/"
+ADCRT="legtux.org"
+DLCRT="http://www.autistici.org/static/certs/ca.crt"
+
+if [[ $1 = "-h" ]]; then
+	print "usage: sslgenfile [-h] <cert_file>.pem"
+	exit 0
+fi
+
+if [[ -n $1 ]]; then
+	unset FCRT
+	FCRT="$1"
+fi
+
+[[ -f $FCRT ]] && rm -f "$FCRT"
+if [[ -d $SRCRT ]]; then
+	print "Generated with sslgenfile - $(LC_ALL=C date)\n" > "$FCRT"
+	print "Merging certificates from $SRCRT"
+	for f in "${SRCRT}/*.crt"; do
+		cat $f >> "$FCRT"
+	done
+fi
+if [[ -n $ADCRT ]]; then
+	print "Saving additional certificate(s) from:"
+	for i in $ADCRT; do
+		print " * $i"
+		print -n | openssl s_client -connect ${i}:443 2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' >> "$FCRT"
+	done
+fi
+if [[ -n $DLCRT ]]; then
+	TF="$(mktemp /tmp/ssl.XXXXXXXXXX)"
+	print "Downloading certificate(s) from:"
+	for i in $DLCRT; do
+		print " * ${i#*//}"
+		curl -Ss ${i} -o $TF
+		cat $TF >> "$FCRT"
+	done
+fi
+print "Certificates saved to $FCRT"
+[[ -n $(find "$FCRT" -type f ! -perm 400) ]] && chmod 400 "$FCRT"
+
+exit
