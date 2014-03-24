@@ -1,12 +1,13 @@
 #!/bin/sh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-#   Query PKGBUILD online
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# Query PKGBUILD online
+# TODO: REWORK DAT UGLY CRAP!
 
 usage() {
-	printf "%s\n" "Usage: ${0##*/} [OPTARG]"
+	printf "%s\n" "Usage: ${0##*/} [-a]"
 	printf "%s\n" "  OPTARG:"
 	printf "%s\n" "    -a 	Search package on AUR."
-	printf "%s\n\n" "If OPTARG isn't specified, pkgcat will query package on [core], [extra] and then [community] repos."
+	printf "%s\n\n" "If OPTARG is empty, pkgcat will query package on [core], [extra] and then [community] repos."
 }
 
 if [ -z "$1" ] || [ "$1" = -h ]; then
@@ -19,7 +20,7 @@ AUR="https://aur.archlinux.org/packages/$LET/$2/PKGBUILD"
 URLP="https://projects.archlinux.org/svntogit/packages.git/plain/trunk/PKGBUILD?h=packages/$1"
 URLC="https://projects.archlinux.org/svntogit/community.git/plain/trunk/PKGBUILD?h=packages/$1"
 
-if [ "$1" = "-a" ] && [ "$#" = 2 ]; then
+if [ "$1" = "-a" ] && [ "$#" -eq 2 ]; then
 	printf "\033[0;32m%s\033[0m\n" "Searching on AUR..."
 	if [ -z "$(curl -s $AUR | awk '/404/')" ]; then
 		printf "\n%s\n" "$(curl -s $AUR)"

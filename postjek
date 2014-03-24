@@ -1,12 +1,12 @@
 #!/usr/bin/mksh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-#   Generate "ready-to-write" Jekyll posts & pages.
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# Generate "ready-to-write" Jekyll posts & pages.
 
-DIR=/$HOME/Repos/JekyBlog
+DIR=${HOME}/Repos/JekyBlog
 
-if [[ -z $1 || $1 = "-h" ]]; then
-	print "Usage: ${0##*/} [-p page_name] [article_title]"
-	print "    -p 	Create a new page instead of a new post/article"
+if [[ -z $1 || $1 = "-h" ]]; then
+	print "Usage: ${0##*/} [-p page_name] article_title"
+	print "    -p   Create a new page instead of a new post/article"
 	exit 1
 fi
 
@@ -15,7 +15,7 @@ if (( $# == 2 )) && [[ $1 = "-p" ]]; then
 	NEWFOL="$2"
 	typeset -l NEWFOL
 	mkdir -p "${DIR}/${NEWFOL}" && cd "${DIR}/${NEWFOL}"
-	print "\033[0;33mYou may rename the folder!\033[0m"
+	print "You may rename the folder!"
 	cat >> index.md <<- EOF
 	---
 	layout: page
@@ -43,7 +43,7 @@ if [[ -d $DIR/_drafts ]]; then
 	---
 	EOF
 else
-	print -u2 "\033[0;31mDirectory doesn't exist!\033[0m"
+	print -u2 "Directory doesn't exist!"
 	exit 1
 fi
 exit 0

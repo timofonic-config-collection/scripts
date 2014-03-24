@@ -1,38 +1,42 @@
 #!/usr/bin/mksh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
+TIME=3
 
 function display_usage {
-    print "Usage: ener [-d] [-r]"
-    print "  Arguments:"
-    print "     -d 	Shutdown the computer"
-    print "     -r 	Reboot the computer"
+	print "Usage: ener [-h] [-s] [-r]"
 }
 
-if [[ -z $1 || $1 = -h ]]; then
-    display_usage
-    exit 1
+function launch_cmds {
+	[[ -n $(pgrep mocp) ]] && mocp -x
+	sleep $TIME
+}
+
+if [[ -z $1 || $1 = "-h" ]]; then
+	display_usage
+	exit
 fi
 
 if [[ -n $DISPLAY ]]; then
-    print "You must close \e[0;31mXServer\e[0m before launching this command"
-    exit 1
+	print "You must close X before launching this command"
+	exit 1
 fi
 
-case "$1" in
-    -d)
-      print "Closing in 3 seconds..."
-      sleep 3
-      sudo shutdown -h now
-      ;;
-    -r)
-      print "Restarting in 3 seconds..."
-      sleep 3
-      sudo shutdown -r now
-      ;;
-    ?)
-      display_usage
-      exit 1
-      ;;
+case $1 in
+	-s)
+		print "Closing in $TIME seconds..."
+		launch_cmds
+		sudo shutdown -h now
+		;;
+	-r)
+		print "Restarting in $TIME seconds..."
+		launch_cmds
+		sudo shutdown -r now
+		;;
+	*)
+		display_usage
+		exit 1
+		;;
 esac
-exit 0
+exit
 

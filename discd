@@ -1,8 +1,8 @@
 #!/bin/sh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-#   HDD daemon
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# HDD daemon
 
-# TODO: REWORK THIS SCRIPT!!!
+# TODO: REWORK THIS CRAPPY SCRIPT!!!
 
 DATE=$(date '+%A %d %B')
 TIME=$(date '+%R')

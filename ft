@@ -1,5 +1,7 @@
 #!/usr/bin/mksh
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+
 cd $HOME/.fonts/bitmaps
-mkfontdir
-xset fp rehash
-exit 0
+mkfontdir && xset fp rehash
+(( $? == 0 )) && print "Done"
+exit

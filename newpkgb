@@ -1,40 +1,33 @@
 #!/usr/bin/mksh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 function chk_pkg {
-    if [[ -r $2 ]]; then
-            curl -s "$URLD" -o "$2".NEW
-        else
-            curl -s "$URLD" -o "$2"
-    fi
+	if [[ -f $1 ]]; then
+			curl -s "$URLD" #-o "$1".NEW
+		else
+			curl -s "$URLD" #-o "$1"
+	fi
 }
 
 if [[ -z $1 ]] || (( $# != 2 )); then
-    print "Usage: ${0##*/} <package_name> <package_file>"
-    exit 1
+	print "Usage: ${0##*/} <package_name> <package_file>"
+	exit 1
 fi
 
 URLM="https://projects.archlinux.org/svntogit/packages.git/plain/trunk/$2?h=packages/$1"
 URLC="https://projects.archlinux.org/svntogit/community.git/plain/trunk/$2?h=packages/$1"
 
-if [[ -z $(curl -s $URLM | awk '/\<head\>/') ]]; then
-    URLD="$URLM"
-    if [[ -r $2 ]]; then
-        curl -s "$URLM" -o "$2".NEW
-    else
-        curl -s "$URLM" -o "$2"
-    fi
+if (( $(curl -SIs $URLM | awk 'NR==1{print $2}') != 404 )); then
+	URLD="$URLM"
+	chk_pkg "$2"
 else
-    if [[ -z $(curl -s $URLC | awk '/\<head\>/') ]]; then
-        if [[ -r $2 ]]; then
-        curl -s "$URLC" -o "$2".NEW
-    else
-        curl -s "$URLC" -o "$2"
-        fi
-    else
-        print "Package not found!"
-        exit 1
-    fi
+	if (( $(curl -SIs $URLC | awk 'NR==1{print $2}') != 404 )); then
+		URLD="$URLC"
+		chk_pkg "$2"
+	else
+		print "Package not found!"
+		exit 1
+	fi
 fi
 
-exit 0
+exit

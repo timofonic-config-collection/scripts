@@ -1,18 +1,17 @@
-#!/bin/bash
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-
-#Logs
-urxvt -geometry 80x23+40+20 -name xlog -title xlog -e sh -c "tail -n 30 -f ~/.log/xlog | ccze -A" &
-urxvt -geometry 80x23+40+400 -name temp -title temp -e sh -c "watch -n15 sensors" &
-#urxvt -geometry 80x23 -name dwmlog -title dwmlog -e sh -c "tail -f ~/.log/dwmlog | ccze -A" &
+#!/usr/bin/mksh
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 UNA=$(uname -r)
-DAT=$(date "+%^a %d %^b" | sed 's/é/E/')
-while true
-do
-    TEM=$(nvidia-smi -q -d TEMPERATURE | awk 'NR == 10 {print $3}')
-    BAR=$(echo -e "\x02ker \x03$UNA \x02gpu \x03$TEM C \x02$DAT\x04 / \x03$(date +%R)")
-    xsetroot -name "$BAR "
-    sleep 1m
+DAT=$(date "+%^a %d %^b")
+DAT=${DAT//é/E}
+
+#urxvtc -geometry 66x22+30+20 -name xlog -title xlog -e mksh -c "tail -n 30 -f $HOME/.log/xlog | ccze -A"
+urxvtc -geometry 66x22+30+400 -name temp -title temp -e /usr/bin/mksh -c "watch -n15 sensors"
+
+while true; do
+	TEM="$(nvidia-smi -q -d TEMPERATURE | awk 'NR == 10 {print $3}')"
+	BAR="$(echo "\x02ker\x03 $UNA \x02gpu\x03 $TEM C \x02$DAT\x04 | \x03$(date +%R)")"
+	xsetroot -name "$BAR "
+	sleep 60
 done &
-dwm 2> $HOME/.log/dwmlog
+dwm 2> $HOME/.yusr/log/dwmlog

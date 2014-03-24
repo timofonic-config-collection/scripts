@@ -1,7 +1,14 @@
-#!/bin/sh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+#!/usr/bin/mksh
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 #LD_LIBRARY_PATH=$HOME/.bin/lib $HOME/.HoN/hon-x86_64
 #LD_PRELOAD=$HOME/.bin/lib/libXss.so.1 $HOME/.HoN/hon-x86_64
-$HOME/.HoN/hon-x86_64
-exit
+
+if [[ -z $(pgrep hon-x86_64) ]]; then
+	$HOME/.HoN/hon-x86_64
+else
+	print -u2 "HoN is already running!"
+	exit 1
+fi
+
+exit 0

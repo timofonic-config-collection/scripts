@@ -1,40 +1,38 @@
-#!/bin/sh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-#   List folders sizes
+#!/usr/bin/mksh
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# List folders sizes
 
-if [ "$1" = "-h" ]; then
-	printf "%s\n" "Usage: ${0##*/}"
-	printf "%s\n\n" "   -r 	List the directory size recursively"
-	exit 0
+if [[ $1 = -h ]]; then
+	print "usage: ${0##*/} [-h] [-r]"
+	print "   -r   List the directory size recursively"
 fi
 
-if [ -z "$1" ]; then
+if [[ -z $1 ]]; then
 	du -sh ./*/ | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}'
-	exit 0
+	exit
 fi
 
-if [ -d "$1" ]; then
+if [[ -d $1 ]]; then
 	du -sh "$1" | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}'
-	exit 0
+	exit
 fi
 
-# TODO => Change following section
-if [ $# = 2 ] && [ "$1" = "-r" ]; then
-		if [ $(du -h "$2" | wc -l) -gt 28 ]; then
+if (( $# == 2 )) && [[ $1 = "-r" ]]; then
+	if (( $(du -h "$2" | wc -l) > 28 )); then
 		du -h "$2" | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}' | less -R
 	else
 		du -h "$2" | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}'
-		fi
-	exit 0
+	fi
+	exit
 fi
 
-if [ "$1" = "-r" ]; then
-	if [ $(du -h "./" | wc -l) -gt 28 ]; then
-		du -h "./"  | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}' | less -R
+if [[ $1 = -r ]]; then
+	if (( $(du -h "./" | wc -l) > 28 )); then
+		du -h "./" | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}' | less -R
 	else
 		du -h "./" | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}'
 	fi
-	exit 0
+	exit
 fi
 
-exit 0
+exit

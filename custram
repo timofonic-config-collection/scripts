@@ -1,4 +1,0 @@
-#!/usr/bin/mksh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-sudo mkinitcpio -c /etc/mkinitcpio-custom.conf -g /boot/initramfs-linux-minimal.img
-exit

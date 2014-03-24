@@ -1,5 +1,5 @@
 #!/usr/bin/mksh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 #   List archive content
 
 function listar {
@@ -10,6 +10,8 @@ function listar {
 			*.tar.gz) tar -ztf "$1" ;;
 			*.tar.xz) tar -Jtf "$1" ;;
 			*.tgz) tar -ztf "$1" ;;
+			*.xz) xz -l "$1" ;;
+			*.xbps) tar -Jtf "$1" ;;
 			*.rar) bsdtar -tf "$1" ;;
 			*.zip) bsdtar -tf "$1" ;;
 			*) print "Unknown archive extension!" ; exit 1 ;;
@@ -20,9 +22,9 @@ function listar {
 }
 
 if (( $(listar $1 | wc -l) > 40 )); then
-	listar $1 | less
+	listar "$1" | less
 else
-	listar $1
+	listar "$1"
 fi
 
 exit 0

@@ -21,9 +21,10 @@ else
 	dir = Dir.pwd
 end
 
-port = 12000 + (dir.hash % 1000)
-serv = "http://127.0.0.1:#{port}"
+#port = 12000 + (dir.hash % 1000)
 #browser = "firefox"
+port = 12000
+serv = "http://127.0.0.1:#{port}"
 
 puts "URL: #{serv}"
 

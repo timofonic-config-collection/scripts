@@ -1,5 +1,5 @@
 #!/usr/bin/mksh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -18,17 +18,17 @@
 #  
 
 #set -x
-CHDEST="/home/y/Builds/ARCH-CHROOT"
-AUTHF="/home/y/.Xauthority"
+CHDEST="/home/ypnose/Builds/ARCH-CHROOT"
+AUTHF="/home/ypnose/.Xauthority"
 
 if [[ -z $CHDEST ]]; then
-	print "error: chroot directory isn't set!" >&2
+	print -u2 "error: chroot directory isn't set!"
 	exit 1
 fi
 
 function usage {
 	cat <<- EOF
-	usage: ywrap -[cehrS]
+	usage: ywrap [-cehrS]
 	options:
 	   -c        Create a new chroot
 	   -e        Enter in the existing chroot
@@ -39,16 +39,16 @@ function usage {
 }
 
 function test_user {
-	# DON'T TELL ME I SHOULD USE EUID, SINCE IT DOESN'T EXIST IN KSH!
+	# DON'T FUCKIN' TELL ME I SHOULD USE EUID, SINCE IT DOESN'T EXIST IN KSH!
 	if (( $(id -u) != 0 )); then
-		print "=> ERROR: You must run this script as root!" >&2
+		print -u2 "=> ERROR: You must run this script as root!"
 		exit 1
 	fi
 }
 
 function test_chroot {
 	if [[ ! -f ${CHDEST}/etc/os-release ]]; then
-		print "=> ERROR: chroot doesn't exist" >&2
+		print -u2 "=> ERROR: chroot doesn't exist"
 		exit 1
 	fi
 }
@@ -58,16 +58,16 @@ function create_chroot {
 		print "=> Creating a new chroot in ${CHDEST}"
 		mkdir -p ${CHDEST}/var/{cache/pacman/pkg,lib/pacman}
 	elif [[ -d $CHDEST && -f ${CHDEST}/etc/os-release ]]; then
-		print "=> ERROR: an existing chroot already exists" >&2
+		print -u2 "=> ERROR: an existing chroot already exists"
 		exit 1
 	fi
 	pacman -r "$CHDEST" -Syyuu bash bzip2 coreutils diffutils file filesystem findutils gawk \
-	gcc-libs gettext glibc grep gzip less logrotate pacman perl procps-ng psmisc sed shadow sysfsutils tar texinfo vi which
+		gcc-libs gettext glibc grep gzip less logrotate pacman perl procps-ng psmisc sed shadow sysfsutils tar texinfo vi which
 	RET=$?
-	if (( $RET == 0 )); then
+	if (( RET == 0 )); then
 		print "=> Packages succesfully installed"
 	else
-		print "=> ERROR: an error occurred" >&2
+		print -u2 "=> ERROR: an error occurred"
 		exit 1
 	fi
 	cat >> ${CHDEST}/root/.bashrc <<- EOF
@@ -75,6 +75,7 @@ function create_chroot {
 	export DISPLAY=:0
 	export XAUTHORITY=/root/.Xauthority
 	alias c='clear'
+	alias ll='ls -ACp --group-directories-first'
 	EOF
 	cat <<-EOF
 	=> You should probably create a regular user, instead of using root!
@@ -84,10 +85,12 @@ function create_chroot {
 
 function rm_chroot {
 	TIM=5
-	[[ ! -d $CHDEST ]] && print "=> ERROR: chroot doesn't exist" >&2 && exit 1
+	[[ ! -d $CHDEST ]] && print -u2 "=> ERROR: chroot doesn't exist" && exit 1
 	print "=> Removing chroot in ${TIM} seconds..."
 	sleep "$TIM"
 	rm -r "$CHDEST"
+	RET=$?
+	(( RET == 0 )) && print "Chroot successfully removed"
 }
 
 function mount_part {
@@ -118,7 +121,8 @@ function go_chroot {
 }
 
 function pac_install {
-	print "Installing package(s) in $CHDEST"
+	print "Installing package(s) in $CHDEST in 5 seconds..."
+	sleep 5
 	pacman -r "$CHDEST" -Syu "$OPTARG"
 }
 
@@ -140,7 +144,7 @@ do
 		   umount_part
 		   ;;
 		h) usage
-		   exit 1
+		   exit
 		   ;;
 		i) pac_install
 		   ;;
@@ -155,8 +159,8 @@ do
 		   exit 1
 		   ;;
 		?) print "Invalid option: -$OPTARG"
-		   usage
 		   exit 1
 		   ;;
 	esac
 done
+

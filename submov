@@ -1,15 +1,11 @@
 #!/bin/sh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
-
-DF="$(tput sgr0)"
-RD="$(tput setaf 1)"
-GR="$(tput setaf 2)"
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
 if [ "$#" -ne 2 ]; then
-	printf "%s\n" "Usage: ${0##*/} <movie_file.*> <subtitles_file.srt>"
+	printf "%s\n" "Usage: ${0##*/} <movie_file> <subtitles_file.srt>"
 	exit 1
 elif [ ! -f "$2" ]; then
-	printf "$RD%s$DF\n" "File doesn't exist!"
+	printf "%s\n" "File doesn't exist!"
 	exit 1
 fi
 
@@ -21,10 +17,10 @@ SRTEXT="${2##*.}"
 mv "$MOVNAM"."$MOVEXT" "$MOVFIL"."$MOVEXT"
 
 if [ "$SRTEXT" = "srt" ]; then
-	mv "$2" ${MOVFIL}.srt
-	printf "$GR%s$DF\n" "Done"
+	mv "$2" "$MOVFIL".srt
+	printf "%s\n" "Done"
 else
-	printf "$RD%$DF\n" "Wrong file extension!"
+	printf "%s\n" "Wrong file extension!"
 	exit 1
 fi
-exit 0
+exit

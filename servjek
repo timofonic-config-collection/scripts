@@ -1,8 +1,15 @@
 #!/usr/bin/mksh
-#   Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
-DIR=$HOME/Repos/JekyBlog
+if [[ -n $(pgrep jekyll) ]]; then
+	print -u2 "ERROR: Jekyll already running!"
+	exit 1
+fi
 
-cd $DIR
-jekyll serve --watch --drafts
-exit 0
+if [[ $PWD != "$HOME/Repos/JekyBlog" ]]; then
+	cd "$HOME/Repos/JekyBlog"
+	jekyll serve --watch
+else
+	jekyll serve --watch
+fi
+exit
