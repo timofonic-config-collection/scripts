@@ -1,0 +1,66 @@
+#!/usr/bin/mksh
+# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# 4 Ultraviolent, 5 Nightmare. Previous skill levels are designed for milksops.
+# Make sure your DOOM2.WAD is in $HOME/.prboom(-plus)
+
+MLDIR="$HOME/Master_Levels"
+
+function usage {
+	print "usage: doosh [-d wad_directory] [-h] [-s skill_level]"
+}
+
+while getopts ":d:hs:" opt; do
+	case $opt in
+		d) MLDIR="$OPTARG" ;;
+		h) usage; exit 1 ;;
+		s) SKIW="$OPTARG" ;;
+		:) print -u2 "Option -$OPTARG needs an argument"; exit 1 ;;
+		\?) print -u2 "This option is invalid -$OPTARG"; exit 1 ;;
+	esac
+done
+shift $(( OPTIND - 1 ))
+
+if [[ ! -d $MLDIR ]]; then
+	print -u2 "ERROR: Directory is missing"
+	exit 1
+fi
+if [[ -n $SKIW ]] && (( SKIW < 1 || SKIW > 5 )); then
+	print -u2 "ERROR: Wrong skill level"
+	exit 1
+fi
+
+PS3='Choose your Master Levels WAD: '
+select NAMW in ATTACK BLACKTWR BLOODSEA CANYON CATWALK COMBINE FISTULA GARRISON GERYON MANOR MEPHISTO MINOS NESSUS \
+	PARADOX SUBSPACE SUBTERRA TEETH TTRAP VESPERAS VIRGIL; do
+	case $REPLY in
+		1) LVLW="01" ;;
+		2) LVLW="25" ;;
+		3) LVLW="07" ;;
+		4) LVLW="01" ;;
+		5) LVLW="01" ;;
+		6) LVLW="01" ;;
+		7) LVLW="01" ;;
+		8) LVLW="01" ;;
+		9) LVLW="08" ;;
+		10) LVLW="01" ;;
+		11) LVLW="07" ;;
+		12) LVLW="05" ;;
+		13) LVLW="07" ;;
+		14) LVLW="01" ;;
+		15) LVLW="01" ;;
+		16) LVLW="01" ;;
+		17) LVLW="31" ;; # 32 Secret Level
+		18) LVLW="01" ;;
+		19) LVLW="09" ;;
+		20) LVLW="03" ;;
+		*) print -u2 "ERROR: Wrong number"; exit 1 ;;
+	esac
+	# We need to test if the filename exists (uppercase and lowercase). Can't use [[ -r ]] or [[ -f ]].
+	if [[ -n $(find "$MLDIR" -type f -iname "${NAMW}.WAD") ]]; then
+		prboom -complevel 2 -iwad DOOM2.WAD -file ${MLDIR}/${NAMW}.WAD -warp $LVLW -skill ${SKIW:-4}
+		exit
+	else
+		print -u2 "ERROR: File is missing"
+		exit 1
+	fi
+done
