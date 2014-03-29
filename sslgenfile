@@ -2,9 +2,9 @@
 # Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 #   You need openssl & ca-certificates in order to use this script
 
-FCRT="$HOME/.yusr/certs/cert.pem"
+FCRT="$HOME/cert.pem"
 SRCRT="/usr/share/ca-certificates/mozilla/"
-ADCRT="legtux.org ljll.math.upmc.fr"
+ADCRT="legtux.org"
 DLCRT="http://www.autistici.org/static/certs/ca.crt"
 
 if [[ $1 = "-h" ]]; then
