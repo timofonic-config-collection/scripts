@@ -14,7 +14,7 @@ if [ -x "/sbin/hdparm" ]; then
 		printf "$RD%d$DF\n" "$HDP"
 	fi
 else
-	printf "%s\n" "Hdparm is not installed!"
+	printf "%s\n" "Hdparm is not installed!" >&2
 fi
 
 # VALUE1 = profile | VALUE2 = mid or low

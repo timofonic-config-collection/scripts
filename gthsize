@@ -24,7 +24,7 @@ elif (( $# == 2 )); then
 		fi
 		print "$GET kB"
 	else
-		print "Github repository not found!"
+		print -u2 "Github repository not found!"
 		exit 1
 	fi
 fi

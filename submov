@@ -5,7 +5,7 @@ if [ "$#" -ne 2 ]; then
 	printf "%s\n" "Usage: ${0##*/} <movie_file> <subtitles_file.srt>"
 	exit 1
 elif [ ! -f "$2" ]; then
-	printf "%s\n" "File doesn't exist!"
+	printf "%s\n" "File doesn't exist!" >&2
 	exit 1
 fi
 
@@ -20,7 +20,7 @@ if [ "$SRTEXT" = "srt" ]; then
 	mv "$2" "$MOVFIL".srt
 	printf "%s\n" "Done"
 else
-	printf "%s\n" "Wrong file extension!"
+	printf "%s\n" "Wrong file extension!" >&2
 	exit 1
 fi
 exit

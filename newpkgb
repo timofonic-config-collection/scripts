@@ -25,7 +25,7 @@ else
 		URLD="$URLC"
 		chk_pkg "$2"
 	else
-		print "Package not found!"
+		print -u2 "Package not found!"
 		exit 1
 	fi
 fi

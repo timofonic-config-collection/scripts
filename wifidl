@@ -7,7 +7,7 @@ URL="http://www.lwfinger.com/b43-firmware/broadcom-wl-5.100.138.tar.bz2"
 
 dlfirm() {
 	if [ -f "${URL##*/}" ]; then
-		printf "%s\n" "An existing archive has been already downloaded!"
+		printf "%s\n" "An existing archive has been already downloaded!" >&2
 		exit 1
 	fi
 	if [ -x "/usr/bin/curl" ]; then
