@@ -1,35 +1,36 @@
 #!/bin/sh
 # Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
-# VALUE = 254
 HDP=$(sudo hdparm -I /dev/sda | awk '/Advanced power/{print $5}')
+PWM="/sys/class/drm/card0/device/power_method"
+PWP="/sys/class/drm/card0/device/power_profile"
+HDPV="254"
+PWMV="profile"
+PWPV="low"
+
 if [ -x "/sbin/hdparm" ]; then
-	if [ "$HDP" = "254" ]; then
+	if [ "$HDP" = "$HDPV" ]; then
 		printf "%d\n" "$HDP"
 	else
-		printf "%d\n" "Value is not 254" >&2
+		printf "%s\n" "Value is not $HDPV" >&2
 	fi
 else
 	printf "%s\n" "Hdparm is not installed!" >&2
 fi
-
-# VALUE1 = profile | VALUE2 = mid or low
-PWM="/sys/class/drm/card0/device/power_method"
-PWP="/sys/class/drm/card0/device/power_profile"
 if [ -f "$PWM" ]; then
-	if [ "$(cat $PWM)" = "profile" ]; then
+	if [ "$(cat $PWM)" = "$PWMV" ]; then
 		cat "$PWM"
 	else
-		printf "%s\n" "Value is not profile" >&2
+		printf "%s\n" "Value is not $PWMV" >&2
 	fi
 else
 	printf "%s\n" "File is missing" >&2
 fi
 if [ -f "$PWP" ]; then
-	if [ "$(cat $PWP)" = "low" ]; then
+	if [ "$(cat $PWP)" = "$PWPV" ]; then
 		cat "$PWP"
 	else
-		printf "%s\n" "Value is not low" >&2
+		printf "%s\n" "Value is not $PWPV" >&2
 	fi
 else
 	printf "%s\n" "File is missing" >&2
