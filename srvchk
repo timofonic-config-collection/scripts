@@ -1,34 +1,37 @@
 #!/bin/sh
 # Script by Ypnose  <linuxien[AT]legtux[DOT]org>
 
-DF="$(tput sgr0)"
-GR="$(tput setaf 2)"
-RD="$(tput setaf 1)"
-
 # VALUE = 254
-HDP=$(sudo hdparm -I /dev/sda | awk '/Advanced power/ {print $5}')
+HDP=$(sudo hdparm -I /dev/sda | awk '/Advanced power/{print $5}')
 if [ -x "/sbin/hdparm" ]; then
 	if [ "$HDP" = "254" ]; then
-		printf "$GR%d$DF\n" "$HDP"
+		printf "%d\n" "$HDP"
 	else
-		printf "$RD%d$DF\n" "$HDP"
+		printf "%d\n" "Value is not 254" >&2
 	fi
 else
 	printf "%s\n" "Hdparm is not installed!" >&2
 fi
 
 # VALUE1 = profile | VALUE2 = mid or low
-PWM=$(cat /sys/class/drm/card0/device/power_method)
-PWP=$(cat /sys/class/drm/card0/device/power_profile)
-if [ "$PWM" = "profile" ]; then
-	printf "$GR%s$DF\n" "$PWM"
+PWM="/sys/class/drm/card0/device/power_method"
+PWP="/sys/class/drm/card0/device/power_profile"
+if [ -f "$PWM" ]; then
+	if [ "$(cat $PWM)" = "profile" ]; then
+		cat "$PWM"
+	else
+		printf "%s\n" "Value is not profile" >&2
+	fi
 else
-	printf "$RD%s$DF\n" "$PWM"
+	printf "%s\n" "File is missing" >&2
 fi
-if [ "$PWP" = "low" ]; then
-	printf "$GR%s$DF\n" "$PWP"
+if [ -f "$PWP" ]; then
+	if [ "$(cat $PWP)" = "low" ]; then
+		cat "$PWP"
+	else
+		printf "%s\n" "Value is not low" >&2
+	fi
 else
-	printf "$RD%s$DF\n" "$PWP"
+	printf "%s\n" "File is missing" >&2
 fi
-
 exit
