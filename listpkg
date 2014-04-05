@@ -1,5 +1,5 @@
 #!/usr/bin/mksh
-# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# Script by Ypnose - http://ypnose.org
 
 WER=$(find -type f -iname "*.pkg.tar.xz" | wc -l)
 

@@ -1,5 +1,5 @@
 #!/usr/bin/mksh
-# Script by Ypnose  <linuxien[AT]legtux[DOT]org>
+# Script by Ypnose - http://ypnose.org
 
 if [[ -n $(pgrep jekyll) ]]; then
 	print -u2 "ERROR: Jekyll already running!"
