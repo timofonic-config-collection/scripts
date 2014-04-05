@@ -44,13 +44,11 @@ if [[ -n $DLCRT ]]; then
 		print -n " * ${i#*//}"
 		curl -Ss ${i} -o $TF
 		FING="$(openssl x509 -in $TF -fingerprint -sha1 -noout | sed 's/.* //;s/Fingerprint=//')"
-		if [[ $FING != ${SUMCRT[n]} ]]; then
+		if [[ $FING != ${SUMCRT[n++]} ]]; then
 			print -u2 " ... Fingerprint doesn't match."
-			(( n++ ))
 			continue
 		else
 			print " ... Fingerprint is OK"
-			(( n++ ))
 		fi
 		sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' $TF >> "$FCRT"
 	done
