@@ -24,7 +24,7 @@ if [ -f "$PWM" ]; then
 		printf "%s\n" "Value is not $PWMV" >&2
 	fi
 else
-	printf "%s\n" "File is missing" >&2
+	printf "%s\n" "$PWM is missing" >&2
 fi
 if [ -f "$PWP" ]; then
 	if [ "$(cat $PWP)" = "$PWPV" ]; then
@@ -33,6 +33,6 @@ if [ -f "$PWP" ]; then
 		printf "%s\n" "Value is not $PWPV" >&2
 	fi
 else
-	printf "%s\n" "File is missing" >&2
+	printf "%s\n" "$PWP is missing" >&2
 fi
 exit

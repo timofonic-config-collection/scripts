@@ -2,7 +2,7 @@
 # Script by Ypnose - http://ypnose.org
 
 if (( $# != 2 )); then
-	print "usage: massdiff [directory1] [directory2]"
+	print "usage: ${0##*/} [directory1] [directory2]"
 	exit 1
 fi
 

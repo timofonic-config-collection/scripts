@@ -7,6 +7,7 @@ DIR=${HOME}/Repos/JekyBlog
 if [[ -z $1 || $1 = "-h" ]]; then
 	print "Usage: ${0##*/} [-p page_name] article_title"
 	print "    -p   Create a new page instead of a new post/article"
+	exit 1
 fi
 
 # Generate page
