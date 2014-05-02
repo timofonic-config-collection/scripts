@@ -27,14 +27,12 @@ if [ "$1" = "-a" ] && [ "$#" -eq 2 ]; then
 fi
 
 printf "%s\n" "Trying core / extra repo..."
-REPO="packages"
 if [ "$(curl -s $URLP | awk 'NR == 1 {print $1}')" != "<!DOCTYPE" ]; then
 	printf "\n%s\n" "$(curl -s $URLP)"
 	exit
 else
 	printf "%s\n%s\n" "Package not found in core / extra" \
 	"Trying community repo..."
-	REPO="community"
 	if [ "$(curl -s $URLC | awk 'NR == 1 {print $1}')" != "<!DOCTYPE" ]; then
 		printf "\n%s\n" "$(curl -s $URLC)"
 		exit
