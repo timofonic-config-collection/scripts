@@ -1,0 +1,12 @@
+#!/usr/bin/mksh
+# Script by Ypnose - http://ypnose.org
+
+if (( $# == 2 )); then
+	diff -u "$@" | awk 'symb=substr($0,1,1){
+		gsub(/^\@/,"\033[1;35m@");gsub(/^\-/,"\033[1;31m-");gsub(/^\+/,"\033[0;32m+");
+		if(symb~/(@|-|+)/){print $0"\033[0m"}else{print}}'
+else
+	print -u2 "usage: ${0##*/} file1 file2"
+fi
+
+exit
