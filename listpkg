@@ -1,8 +1,14 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ypnose.org
 
-WER=$(find -type f -iname "*.pkg.tar.xz" | wc -l)
+if [[ $1 = "-h" ]]; then
+	print "usage: ${0##*/} [-h] [package_extension]"
+	exit
+elif [[ -n $1 ]]; then
+	EXT="$1"
+fi
 
+WER=$(find -type f -iname "*.${EXT:-tgz}" | wc -l)
 if (( WER == 0 )); then
 	print "No package(s) found"
 	exit
@@ -10,10 +16,11 @@ fi
 
 print "You have $WER packages in $PWD"
 while true; do
-	print -n "Would you like to list these packages ? [Y/n] "
+	print -n "Would you like to list these packages? [Y/n] "
 	read RESP
 	case $RESP in
-		[Yy]*) find -type f -iname "*.pkg.tar.xz" -printf '%h => %f\n' | sort; exit;;
+		[Yy]*) find -type f -iname "*.${EXT:-tgz}" | while IFS=$'\n' read -r PKG; do 
+				DIRP="${PKG%/*}"; DIRP="${DIRP#*/}"; PKGN="${PKG##*/}"; print " $DIRP => $PKGN"; done | sort; exit;;
 		[Nn]*) exit;;
 		*) print -u2 "Please answer yes or no!";;
 	esac
