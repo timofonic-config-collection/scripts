@@ -10,7 +10,7 @@ function chk_pkg {
 }
 
 if [[ -z $1 ]] || (( $# != 2 )); then
-	print "Usage: ${0##*/} <package_name> <package_file>"
+	print "Usage: ${0##*/} [package_name] [package_file]"
 	exit 1
 fi
 

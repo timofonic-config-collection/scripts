@@ -25,9 +25,7 @@ fi
 if [[ -d $SRCRT ]]; then
 	print "Generated with sslgenfile - $(LC_ALL=C date)\n" > "$FCRT"
 	print "Merging certificates from $SRCRT"
-	for f in "${SRCRT}/*.crt"; do
-		cat $f >> "$FCRT"
-	done
+	cat ${SRCRT}/*.crt >> "$FCRT"
 fi
 if [[ -n $ADCRT ]]; then
 	print "Saving additional certificate(s) from:"
@@ -52,6 +50,7 @@ if [[ -n $DLCRT ]]; then
 		fi
 		sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' $TF >> "$FCRT"
 	done
+	rm "$TF"
 fi
 print "Certificates saved to $FCRT"
 [[ -n $(find "$FCRT" -type f ! -perm 400) ]] && chmod 400 "$FCRT"
