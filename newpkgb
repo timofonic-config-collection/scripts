@@ -3,9 +3,9 @@
 
 function chk_pkg {
 	if [[ -f $1 ]]; then
-			curl -s "$URLD" #-o "$1".NEW
-		else
-			curl -s "$URLD" #-o "$1"
+		curl -s "$URLD" #-o "$1".NEW
+	else
+		curl -s "$URLD" #-o "$1"
 	fi
 }
 
@@ -25,7 +25,7 @@ else
 		URLD="$URLC"
 		chk_pkg "$2"
 	else
-		print -u2 "Package not found!"
+		print -u2 "Package or file not found!"
 		exit 1
 	fi
 fi

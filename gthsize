@@ -10,7 +10,7 @@ fi
 if [[ -z $1 ]] || (( $# == 1 )); then
 	CHX="$1"
 	GITUSER="${CHX:=Ypnose}"
-	curl -Ss https://api.github.com/users/$GITUSER/repos | awk '/"name"/ {gsub (/"|,/,""); print $2}'
+	curl -Ss https://api.github.com/users/${GITUSER}/repos | awk '/"name"/ {gsub (/"|,/,""); print $2}'
 	exit
 elif (( $# == 2 )); then
 	TEMPF=$(mktemp)
@@ -20,7 +20,7 @@ elif (( $# == 2 )); then
 	if [[ -n $GET ]]; then
 		if (( NUMBR != 1 )); then
 			unset GET
-			GET=$(curl -s https://api.github.com/repos/$1/$2 | awk '/"size"/ && x==0 {gsub (/,/,""); if(x=1) print $2;exit}')
+			GET=$(curl -s https://api.github.com/repos/${1}/${2} | awk '/"size"/ && x==0 {gsub (/,/,""); if(x=1) print $2;exit}')
 		fi
 		print "$GET kB"
 	else

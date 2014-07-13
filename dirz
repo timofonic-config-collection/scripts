@@ -2,35 +2,41 @@
 # Script by Ypnose - http://ypnose.org
 # List folders sizes
 
-if [[ $1 = -h ]]; then
-	print "usage: ${0##*/} [-h] [-r]"
+function colorize {
+	while IFS=$'\t' read -r SIZE FILDIR; do
+		print -- "\033[1;35m${SIZE}\033[0m\t${FILDIR}"
+	done
+}
+
+if [[ $1 = "-h" ]]; then
+	print "usage: ${0##*/} [-h] [-r] directory"
 	print "   -r   List the directory size recursively"
 fi
 
 if [[ -z $1 ]]; then
-	du -sh ./*/ | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}'
+	du -sh ./*/ | colorize
 	exit
 fi
 
 if [[ -d $1 ]]; then
-	du -sh "$1" | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}'
+	du -sh "$1" | colorize
 	exit
 fi
 
 if (( $# == 2 )) && [[ $1 = "-r" ]]; then
-	if (( $(du -h "$2" | wc -l) > 28 )); then
-		du -h "$2" | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}' | less -R
+	if (( $(du -h "$2" | wc -l) > 36 )); then
+		du -h "$2" | colorize | less -R
 	else
-		du -h "$2" | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}'
+		du -h "$2" | colorize
 	fi
 	exit
 fi
 
-if [[ $1 = -r ]]; then
-	if (( $(du -h "./" | wc -l) > 28 )); then
-		du -h "./" | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}' | less -R
+if [[ $1 = "-r" ]]; then
+	if (( $(du -h "./" | wc -l) > 36 )); then
+		du -h "./" | colorize | less -R
 	else
-		du -h "./" | awk -F"\t" '{print "\033[1;35m"$1"\033[0m" "\t" $2}'
+		du -h "./" | colorize
 	fi
 	exit
 fi
