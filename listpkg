@@ -8,7 +8,7 @@ elif [[ -n $1 ]]; then
 	EXT="$1"
 fi
 
-WER=$(find -type f -iname "*.${EXT:-tgz}" | wc -l)
+WER=$(find . -type f -iname "*.${EXT:-tgz}" | wc -l)
 if (( WER == 0 )); then
 	print "No package(s) found"
 	exit
@@ -19,9 +19,9 @@ while true; do
 	print -n "Would you like to list these packages? [Y/n] "
 	read RESP
 	case $RESP in
-		[Yy]*) find -type f -iname "*.${EXT:-tgz}" | while IFS=$'\n' read -r PKG; do 
-				DIRP="${PKG%/*}"; DIRP="${DIRP#*/}"; PKGN="${PKG##*/}"; print " $DIRP => $PKGN"; done | sort; exit;;
-		[Nn]*) exit;;
-		*) print -u2 "Please answer yes or no!";;
+		[Yy]*) find . -type f -iname "*.${EXT:-tgz}" | while IFS=$'\n' read -r PKG; do 
+				DIRP="${PKG%/*}"; DIRP="${DIRP#*/}"; PKGN="${PKG##*/}"; print " $DIRP => $PKGN"; done | sort; exit ;;
+		[Nn]*) exit ;;
+		*) print -u2 "Please answer yes or no!" ;;
 	esac
 done

@@ -1,43 +1,16 @@
 #!/bin/sh
 # Script by Ypnose - http://ypnose.org
-# Remove trash files from Windows or KDE (Thumbs.db for example)
+# Remove trash files from Mac (.DS_Store), Windows (Thumbs.db) or KDE.
 
-# We aren't using find -print0 because some systems don't have this option.
+TRA="$(find . -type f -iname "Thumbs.db" -o -iname "desktop.ini" \
+	-o -iname ".directory" -o -iname ".DS_Store")"
 
-THU=$(find . -type f -iname "Thumbs.db" | wc -l)
-DES=$(find . -type f -iname "desktop.ini" | wc -l)
-DIR=$(find . -type f -iname ".directory" | wc -l)
-
-if [ "$THU" -ne 0 ]; then
-	printf "You have %d Thumbs.db\n" "$THU"
-fi
-
-if [ "$DES" -ne 0 ]; then
-	printf "You have %d desktop.ini\n" "$DES"
-fi
-
-if [ "$DIR" -ne 0 ]; then
-	printf "You have %d .directory\n" "$DIR"
-fi
-
-if [ -n "$(find . -type f -iname 'Thumbs.db')" ]; then
-	find -type f -iname "Thumbs.db" | sed 's/./\\&/g' | xargs rm
-	printf "%s\n" "All Thumbs.db files found have been successfully deleted"
+if [ -n "$TRA" ]; then
+	find . -type f \( -iname "Thumbs.db" -o -iname "desktop.ini" \
+		-o -iname ".directory" -o -iname ".DS_Store" \) -print0 | xargs -0 rm
+	[ $? -eq 0 ] && printf "%s\n" "The file(s) found have been successfully deleted"
 else
-	printf "%s\n" "No Thumbs.db file has been detected"
+	printf "%s\n" "No file(s) has been detected!"
 fi
 
-if [ -n "$(find . -type f -iname 'desktop.ini*')" ]; then
-	find -type f -iname "desktop.ini*" | sed 's/./\\&/g' | xargs rm
-	printf "%s\n" "All desktop.ini files found have been successfully deleted"
-else
-	printf "%s\n" "No desktop.ini file has been detected"
-fi
-
-if [ -n "$(find . -type f -iname '.directory')" ]; then
-	find -type f -iname ".directory*" | sed 's/./\\&/g' | xargs rm
-	printf "%s\n" "All .directory files found have been successfully deleted"
-else
-	printf "%s\n" "No .directory file has been detected"
-fi
 exit

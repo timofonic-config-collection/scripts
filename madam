@@ -23,12 +23,12 @@ while getopts ":hp:s" opt; do
 done
 shift $(( OPTIND - 1 ))
 
-URL="$(curl -Ss http://www.bonjourmadame.fr/${PAGE:+page/${PAGE}/} |
-	sed -ne '/class="photo post"/,/class="navigation"/p' | sed '/img/!d;s/.*src="//g;s/".*//g')"
+URL="$(curl -Ss "http://www.bonjourmadame.fr/${PAGE:+page/${PAGE}/}" \
+	| sed -ne '/class="photo post"/,/class="navigation"/p' | sed '/img/!d;s/.*src="//g;s/".*//g')"
 EXT="${URL##*.}"
 TEMF="$(mktemp /tmp/madam.XXXXXXXXXX)"
 
-if [[ $URL = http://* ]]; then
+if [[ $URL = "http://"* ]]; then
 	curl -Ss "$URL" -o "$TEMF" && sxiv -g "1280x1024" "$TEMF"
 	if (( SAVE == 1 )); then
 		SUF="${TEMF##*/}"

@@ -9,7 +9,7 @@ if [[ -z $1 ]]; then
 	print -u2 "usage: ${0##*/} [file]"
 	exit 1
 elif [[ ! -f $1 ]]; then
-	print -u2 "File is missing!"
+	print -u2 "$1 is missing!"
 	exit 1
 fi
 

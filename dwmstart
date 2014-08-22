@@ -1,15 +1,12 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ypnose.org
 
-UNA=$(uname -r)
-DAT=$(date "+%^a %d %^b")
-DAT=${DAT//é/E}
+UNA="$(uname -r)"
+DAT="$(LC_ALL=C date "+%^a %d %^b")"
 
-#urxvtc -geometry 66x22+30+20 -name xlog -title xlog -e mksh -c "tail -n 30 -f $HOME/.log/xlog | ccze -A"
 urxvtc -geometry 66x22+30+400 -name temp -title temp -e /usr/bin/mksh -c "watch -n15 sensors"
-
 while true; do
-	TEM="$(nvidia-smi -q -d TEMPERATURE | awk 'NR == 10 {print $3}')"
+	TEM="$(nvidia-smi -q -d TEMPERATURE | awk 'NR==10{print $5}')"
 	BAR="$(echo "\x02ker\x03 $UNA \x02gpu\x03 $TEM C \x02$DAT\x04 | \x03$(date +%R)")"
 	xsetroot -name "$BAR "
 	sleep 60

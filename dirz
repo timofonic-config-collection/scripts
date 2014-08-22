@@ -16,10 +16,8 @@ fi
 if [[ -z $1 ]]; then
 	du -sh ./*/ | colorize
 	exit
-fi
-
-if [[ -d $1 ]]; then
-	du -sh "$1" | colorize
+else
+	du -sh "$@" | colorize
 	exit
 fi
 
