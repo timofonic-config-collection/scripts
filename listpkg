@@ -1,5 +1,5 @@
 #!/usr/bin/mksh
-# Script by Ypnose - http://ypnose.org
+# Script by Ypnose - http://ywstd.fr
 
 if [[ $1 = "-h" ]]; then
 	print "usage: ${0##*/} [-h] [package_extension]"

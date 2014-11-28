@@ -1,5 +1,5 @@
 #!/bin/sh
-# Script by Ypnose - http://ypnose.org
+# Script by Ypnose - http://ywstd.fr
 # Remove trash files from Mac (.DS_Store), Windows (Thumbs.db) or KDE.
 
 TRA="$(find . -type f -iname "Thumbs.db" -o -iname "desktop.ini" \

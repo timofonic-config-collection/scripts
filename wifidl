@@ -1,5 +1,5 @@
 #!/bin/sh
-# Script by Ypnose - http://ypnose.org
+# Script by Ypnose - http://ywstd.fr
 # Based on those lines: http://linuxwireless.org/en/users/Drivers/b43#Other_distributions_not_mentioned_above
 
 FIRMWARE_INSTALL_DIR="/lib/firmware"

@@ -1,5 +1,5 @@
 #!/usr/bin/mksh
-# Script by Ypnose - http://ypnose.org
+# Script by Ypnose - http://ywstd.fr
 
 function chk_pkg {
 	if [[ -f $1 ]]; then

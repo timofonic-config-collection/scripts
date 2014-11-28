@@ -1,5 +1,5 @@
 #!/bin/sh
-# Script by Ypnose - http://ypnose.org
+# Script by Ypnose - http://ywstd.fr
 
 HDP=$(sudo hdparm -I /dev/sda | awk '/Advanced power/{print $5}')
 PWM="/sys/class/drm/card0/device/power_method"

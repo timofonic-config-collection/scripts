@@ -1,5 +1,5 @@
 #!/usr/bin/mksh
-# Script by Ypnose - http://ypnose.org
+# Script by Ypnose - http://ywstd.fr
 # Generate "ready-to-write" Jekyll posts & pages.
 
 DIR=${HOME}/Repos/JekyBlog

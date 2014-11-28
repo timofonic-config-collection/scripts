@@ -1,5 +1,5 @@
 #!/usr/bin/mksh
-# Script by Ypnose - http://ypnose.org
+# Script by Ypnose - http://ywstd.fr
 
 UNA="$(uname -r)"
 DAT="$(LC_ALL=C date "+%^a %d %^b")"

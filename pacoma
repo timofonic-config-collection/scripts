@@ -1,5 +1,5 @@
 #!/usr/bin/mksh
-# Script by Ypnose - http://ypnose.org
+# Script by Ypnose - http://ywstd.fr
 
 awk '/(pacman)|(makepkg)/ {
 	gsub (/alias/, "\033[1;36malias\033[0m");

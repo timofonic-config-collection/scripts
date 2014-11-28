@@ -1,5 +1,5 @@
 #!/usr/bin/awk -f
-# Script by Ypnose - http://ypnose.org
+# Script by Ypnose - http://ywstd.fr
 
 BEGIN {FS="\n"}
 symb=substr($0,1,1){

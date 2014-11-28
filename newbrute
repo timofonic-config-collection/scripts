@@ -1,5 +1,5 @@
 #!/bin/ksh
-# Script by Ypnose - http://ypnose.org
+# Script by Ypnose - http://ywstd.fr
 # Add trap INT / TERM
 
 set -e
