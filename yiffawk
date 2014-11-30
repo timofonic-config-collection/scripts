@@ -1,17 +1,17 @@
 #!/usr/bin/awk -f
 # Script by Ypnose - http://ywstd.fr
 
-BEGIN {FS="\n"}
-symb=substr($0,1,1){
-	if(symb~/\@/){
+BEGIN { FS="\n" }
+symb = substr($0,1,1) {
+	# Highlight end line space(s)/tab(s)
+	gsub(/[\t ]+$/,"\033[0;41m \033[0m")
+	if (symb == "@") {
 		print "\033[1;35m"$0"\033[0m"
-	}else if(symb~/\-/){
+	} else if (symb == "-") {
 		print "\033[1;31m"$0"\033[0m"
-	}else if(symb~/\+/){
+	} else if (symb == "+") {
 		print "\033[0;32m"$0"\033[0m"
-	}else{
+	} else {
 		print $0
 	}
 }
-
-exit
