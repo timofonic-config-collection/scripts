@@ -6,10 +6,10 @@ FCRT="$HOME/cert.pem"
 SRCRT="/usr/share/ca-certificates/mozilla/"
 ADCRT="legtux.org"
 DLCRT="http://www.autistici.org/static/certs/ca.crt
- http://www.cacert.org/certs/root.crt"
+	http://www.cacert.org/certs/root.crt"
 # For every entry in DLCRT, you need to write a SHA1 fingerprint, in the array.
 set -A SUMCRT -- "D4:A8:07:24:0C:26:B6:D7:9D:AA:CC:CA:77:BA:3A:27:AE:0C:B5:35" \
- "13:5C:EC:36:F4:9C:B8:E9:3B:1A:B2:70:CD:80:88:46:76:CE:8F:33"
+	"13:5C:EC:36:F4:9C:B8:E9:3B:1A:B2:70:CD:80:88:46:76:CE:8F:33"
 
 if [[ $1 = "-h" ]]; then
 	print "usage: sslgenfile [-h] <cert_file>.pem"
@@ -23,15 +23,15 @@ fi
 
 [[ -f $FCRT ]] && rm -f "$FCRT"
 if [[ -d $SRCRT ]]; then
-	print "Generated with sslgenfile - $(LC_ALL=C date)\n" > "$FCRT"
+	print "Generated with sslgenfile - $(LC_ALL=C date)\n" >"$FCRT"
 	print "Merging certificates from $SRCRT"
-	cat ${SRCRT}/*.crt >> "$FCRT"
+	cat ${SRCRT}/*.crt >>"$FCRT"
 fi
 if [[ -n $ADCRT ]]; then
 	print "Saving additional certificate(s) from:"
 	for i in $ADCRT; do
 		print " * $i"
-		print -n | openssl s_client -connect ${i}:443 2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' >> "$FCRT"
+		print -n | openssl s_client -connect ${i}:443 2>&1 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' >>"$FCRT"
 	done
 fi
 if [[ -n $DLCRT ]]; then
@@ -48,7 +48,7 @@ if [[ -n $DLCRT ]]; then
 		else
 			print " ... Fingerprint is OK"
 		fi
-		sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' "$TF" >> "$FCRT"
+		sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' "$TF" >>"$FCRT"
 	done
 	rm "$TF"
 fi
