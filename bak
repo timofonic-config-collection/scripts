@@ -9,7 +9,7 @@ if [[ -z $1 ]]; then
 	print -u2 "usage: ${0##*/} [file]"
 	exit 1
 elif [[ ! -f $1 ]]; then
-	print -u2 -- "$1 is missing!"
+	print -ru2 -- "$1 is missing!"
 	exit 1
 fi
 
@@ -20,7 +20,7 @@ while true; do
 	fi
 	if [[ ! -f ${1}.${FEXT}.${N} ]]; then
 		cp -- "$1" "${1}.${FEXT}.${N}"
-		print -- "$1 copied to ${1}.${FEXT}.${N}" 
+		print -r -- "$1 copied to ${1}.${FEXT}.${N}" 
 		exit
 	fi
 	(( N++ ))
