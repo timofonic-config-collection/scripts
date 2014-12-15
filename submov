@@ -1,5 +1,6 @@
 #!/bin/sh
 # Script by Ypnose - http://ywstd.fr
+# UNMAINTAINED
 
 if [ "$#" -ne 2 ]; then
 	printf "%s\n" "Usage: ${0##*/} <movie_file> <subtitles_file.srt>"
