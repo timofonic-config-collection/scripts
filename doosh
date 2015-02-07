@@ -11,10 +11,10 @@ function usage {
 
 while getopts ":d:hs:" opt; do
 	case $opt in
-		d) MLDIR="$OPTARG" ;;
-		h) usage; exit 1 ;;
-		s) SKIW="$OPTARG" ;;
-		:) print -u2 "Option -$OPTARG needs an argument"; exit 1 ;;
+		d)  MLDIR="$OPTARG" ;;
+		h)  usage; exit 1 ;;
+		s)  SKIW="$OPTARG" ;;
+		:)  print -u2 "Option -$OPTARG needs an argument"; exit 1 ;;
 		\?) print -u2 "This option is invalid -$OPTARG"; exit 1 ;;
 	esac
 done
@@ -33,15 +33,15 @@ PS3='Choose your Master Levels WAD: '
 select NAMW in ATTACK BLACKTWR BLOODSEA CANYON CATWALK COMBINE FISTULA GARRISON GERYON MANOR MEPHISTO MINOS NESSUS \
 	PARADOX SUBSPACE SUBTERRA TEETH TTRAP VESPERAS VIRGIL; do
 	case $REPLY in
-		1) LVLW="01" ;;
-		2) LVLW="25" ;;
-		3) LVLW="07" ;;
-		4) LVLW="01" ;;
-		5) LVLW="01" ;;
-		6) LVLW="01" ;;
-		7) LVLW="01" ;;
-		8) LVLW="01" ;;
-		9) LVLW="08" ;;
+		1)  LVLW="01" ;;
+		2)  LVLW="25" ;;
+		3)  LVLW="07" ;;
+		4)  LVLW="01" ;;
+		5)  LVLW="01" ;;
+		6)  LVLW="01" ;;
+		7)  LVLW="01" ;;
+		8)  LVLW="01" ;;
+		9)  LVLW="08" ;;
 		10) LVLW="01" ;;
 		11) LVLW="07" ;;
 		12) LVLW="05" ;;
@@ -53,11 +53,11 @@ select NAMW in ATTACK BLACKTWR BLOODSEA CANYON CATWALK COMBINE FISTULA GARRISON 
 		18) LVLW="01" ;;
 		19) LVLW="09" ;;
 		20) LVLW="03" ;;
-		*) print -u2 "ERROR: Wrong number"; exit 1 ;;
+		*)  print -u2 "ERROR: Wrong number"; exit 1 ;;
 	esac
 	# We need to test if the filename exists (uppercase and lowercase). Can't use [[ -r ]] or [[ -f ]].
 	if [[ -n $(find "$MLDIR" -type f -iname "${NAMW}.WAD") ]]; then
-		prboom -complevel 2 -iwad DOOM2.WAD -file ${MLDIR}/${NAMW}.WAD -warp $LVLW -skill ${SKIW:-4}
+		prboom -complevel 2 -iwad DOOM2.WAD -file "${MLDIR}/${NAMW}.WAD" -warp "$LVLW" -skill "${SKIW:-4}"
 		exit
 	else
 		print -u2 "ERROR: File is missing"
