@@ -1,0 +1,18 @@
+#!/usr/bin/mksh
+# Ypnose - http://ywstd.fr
+
+KDIR="${HOME}/.yusr/xkb"
+
+if [[ $1 = "-h" ]]; then
+	print "usage: ${0##*/} [-h] map"
+	exit
+elif [[ -n $1 ]]; then
+	if [[ ! -f ${KDIR}/${1}.xkb ]]; then
+		print -u2 "Unable to find ${KDIR}/${1}.xkb map"
+		exit 1
+	fi
+fi
+
+xkbcomp -I"$KDIR" "${KDIR}/${1:-kbyp}.xkb" "$DISPLAY"
+
+exit
