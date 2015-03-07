@@ -1,4 +1,4 @@
-#!/home/ypnose/dev/AWK/nawk -f
+#!/usr/bin/awk -f
 # Script by Ypnose - http://ywstd.fr
 
 # Init vars
