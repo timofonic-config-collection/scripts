@@ -1,5 +1,6 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ywstd.fr
+# UNMAINTAINED
 
 if [[ -n $(pgrep jekyll) ]]; then
 	print -u2 "ERROR: Jekyll already running!"

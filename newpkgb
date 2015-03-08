@@ -1,5 +1,6 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ywstd.fr
+# UNMAINTAINED
 
 function chk_pkg {
 	if [[ -f $1 ]]; then

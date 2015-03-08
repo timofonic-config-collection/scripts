@@ -1,7 +1,7 @@
 #!/bin/sh
 # Script by Ypnose - http://ywstd.fr
 # Query PKGBUILD online
-# UNMAINTAINED!!
+# UNMAINTAINED
 
 # With bash
 # LET="${2:0:2}"
