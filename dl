@@ -1,0 +1,20 @@
+#!/usr/bin/mksh
+# Script by Ypnose - http://ywstd.fr
+
+if [[ -z $1 ]]; then
+	print -u2 "URL is missing"
+	exit 1
+fi
+
+if [[ -n $(whence -p cur) ]]; then
+	for f in "$@"; do
+		curl -OL --ipv4 -- "$f"
+	done
+elif [[ -n $(whence -p wget) ]]; then
+	wget --inet4-only -- "$@"
+else
+	print -u2 "Unable to find curl / wget"
+	exit 1
+fi
+
+exit
