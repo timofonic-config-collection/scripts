@@ -6,7 +6,7 @@ if [[ -z $1 ]]; then
 	exit 1
 fi
 
-if [[ -n $(whence -p cur) ]]; then
+if [[ -n $(whence -p curl) ]]; then
 	for f in "$@"; do
 		curl -OL --ipv4 -- "$f"
 	done
