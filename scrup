@@ -1,0 +1,37 @@
+#!/usr/bin/mksh
+# Script by Ypnose - http://ywstd.fr
+set -e
+
+trap 'date "+%Y-%m-%d %H-%M" >"${1}/ERROR"' ERR
+trap '[[ -f $TFILE ]] && rm "$TFILE"' INT EXIT
+
+TFILE="$(mktemp /tmp/${0##*/}.XXXXXXXXXX)"
+URLGIT="https://raw.githubusercontent.com/Ypnose/scripts/master"
+
+if [[ -z $1 || $1 = "-h" ]]; then
+	print -u2 "usage: ${0##*/} [-h] [dir]"
+	exit 1
+fi
+
+if [[ ! -f ${1}/CHKLIST ]]; then
+	print -u2 "Unable to find CHKLIST in $1"
+	exit 1
+fi
+
+[[ -f ${1}/ERROR ]] && rm ${1}/ERROR
+while IFS=$'\n' read -r SCR; do
+	[[ -z $SCR || ${SCR:0:1} = "#" ]] && continue
+	#curl -Ss --ipv4 "${URLGIT}/${SCR}"
+	# Replace shebang
+	wget -q --inet4-only -O - "${URLGIT}/${SCR}" \
+		| sed '1 s|/usr/bin/mksh$|/bin/mksh|' >"$TFILE"
+	# Test changes on existing file
+	[[ -f ${1}/${SCR} && -z $(diff -q "${1}/${SCR}" "$TFILE") ]] && continue
+	# Test if the new file isn't empty
+	if [[ -s $TFILE ]]; then
+		cat "$TFILE" >"${1}/${SCR}"
+		chmod +x "${1}/${SCR}"
+	fi
+done <"${1}/CHKLIST"
+
+exit
