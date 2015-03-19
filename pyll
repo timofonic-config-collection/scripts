@@ -1,0 +1,14 @@
+#!/usr/bin/mksh
+# Script by Ypnose - http://ywstd.fr
+# Just a simple snippet. Will be extended…
+
+# wget -q -O -
+curl -s "http://airparif.fr/" | awk '
+	/<a data-tooltip="def-head"/ {
+		gsub(/^.*<strong>|<\/strong>.*$/,"")
+		print $0
+		exit
+	}
+'
+
+exit
