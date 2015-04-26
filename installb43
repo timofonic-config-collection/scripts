@@ -1,0 +1,30 @@
+#!/bin/sh
+# Script by Ypnose - http://ywstd.fr
+# Based on http://linuxwireless.org/en/users/Drivers/b43/#Install_b43-fwcutter
+
+FWDIR="/lib/firmware"
+FWURL="http://www.lwfinger.com/b43-firmware/broadcom-wl-5.100.138.tar.bz2"
+
+if [ -d "${FWDIR}/b43" ]; then
+	printf "%s\n" "b43 firmware already installed" >&2
+	exit 1
+fi
+
+cd /tmp
+
+if [ ! -f "${FWURL##*/}" ]; then
+	wget "$FWURL"
+fi
+
+if [ -z "$(which b43-fwcutter 2>/dev/null)" ]; then
+	printf "%s\n" "b43-fwcutter is not installed" >&2
+	exit 1
+fi
+
+tar jvxf "${FWURL##*/}"
+sudo b43-fwcutter -w "$FWDIR" "broadcom-wl-5.100.138/linux/wl_apsta.o"
+# "Fix" permissions
+sudo chmod 755 "${FWDIR}/b43"
+printf "%s\n" "b43 firmware installed in ${FWDIR}/b43"
+
+exit
