@@ -1,0 +1,26 @@
+#!/usr/bin/mksh
+# Script by Ypnose - http://ywstd.fr
+
+P="█"
+
+while (( TERMLIN < LINES )); do
+	TERMCOL=0
+	while (( TERMCOL < COLUMNS )); do
+		LUCK="$(( RANDOM % 2 ))"
+		FATE="$(( RANDOM % 7 + 1 ))"
+		HOLE="$(( COLUMNS - TERMCOL ))"
+		if (( HOLE < 2 )); then
+			print -n -- "\033[${LUCK};3${FATE}m${P}"
+		else
+			print -n -- "\033[${LUCK};3${FATE}m${P}${P}"
+		fi
+		(( TERMCOL++ ))
+		(( TERMCOL++ ))
+	done
+	(( TERMLIN++ ))
+done
+print -n -- "\033[0m"
+
+read
+
+exit
