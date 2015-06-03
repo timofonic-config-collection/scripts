@@ -14,8 +14,7 @@ while (( TERMLIN < LINES )); do
 		else
 			print -n -- "\033[${LUCK};3${FATE}m${P}${P}"
 		fi
-		(( TERMCOL++ ))
-		(( TERMCOL++ ))
+		(( TERMCOL = TERMCOL + 2 ))
 	done
 	(( TERMLIN++ ))
 done
