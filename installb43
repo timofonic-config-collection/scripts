@@ -10,17 +10,14 @@ if [ -d "${FWDIR}/b43" ]; then
 	exit 1
 fi
 
-cd /tmp
-
-if [ ! -f "${FWURL##*/}" ]; then
-	wget "$FWURL"
-fi
-
 if [ -z "$(which b43-fwcutter 2>/dev/null)" ]; then
 	printf "%s\n" "b43-fwcutter is not installed" >&2
 	exit 1
 fi
 
+cd /tmp
+
+[ ! -f "${FWURL##*/}" ] && wget "$FWURL"
 tar jvxf "${FWURL##*/}"
 sudo b43-fwcutter -w "$FWDIR" "broadcom-wl-5.100.138/linux/wl_apsta.o"
 # "Fix" permissions

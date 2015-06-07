@@ -12,10 +12,10 @@ function usage {
 while getopts ":d:hs:" opt; do
 	case $opt in
 		d)  MLDIR="$OPTARG" ;;
-		h)  usage; exit 1 ;;
-		s)  SKIW="$OPTARG" ;;
+		h)  usage; exit 1   ;;
+		s)  SKIW="$OPTARG"  ;;
 		:)  print -u2 "Option -$OPTARG needs an argument"; exit 1 ;;
-		\?) print -u2 "This option is invalid -$OPTARG"; exit 1 ;;
+		\?) print -u2 "This option is invalid -$OPTARG"; exit 1   ;;
 	esac
 done
 shift $(( OPTIND - 1 ))
