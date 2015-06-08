@@ -1,7 +1,14 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ywstd.fr
 
-cd $HOME/.fonts/bitmaps
+DFT="${HOME}/.fonts/bitmaps"
+
+if [[ ! -d $DFT ]]; then
+	print -u2 -- "$DFT is missing"
+	exit 1
+fi
+
+cd "$DFT"
 mkfontdir && xset fp rehash
-(( $? == 0 )) && print "Done"
+(( $? != 0 )) && print -u2 "An error occured"
 exit

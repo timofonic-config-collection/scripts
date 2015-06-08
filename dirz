@@ -9,24 +9,8 @@ function colorize {
 }
 
 if [[ $1 = "-h" ]]; then
-	print "usage: ${0##*/} [-h] [-r] directory"
-	print "   -r   List the directory size recursively"
-fi
-
-if [[ -z $1 ]]; then
-	du -sh ./*/ | colorize
-	exit
-else
-	du -sh "$@" | colorize
-	exit
-fi
-
-if (( $# == 2 )) && [[ $1 = "-r" ]]; then
-	if (( $(du -h "$2" | wc -l) > 36 )); then
-		du -h "$2" | colorize | less -R
-	else
-		du -h "$2" | colorize
-	fi
+	print "usage: ${0##*/} [-h] [-r]"
+	print "  -r   List the directory size recursively"
 	exit
 fi
 
@@ -36,7 +20,10 @@ if [[ $1 = "-r" ]]; then
 	else
 		du -h "./" | colorize
 	fi
-	exit
+elif [[ -z $1 ]]; then
+	du -sh ./*/ | colorize
+else
+	du -sh -- "$@" | colorize
 fi
 
 exit

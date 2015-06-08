@@ -1,10 +1,11 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ywstd.fr
+# This script was designed for my shitty new screen
 
 TIME=3
 
 function display_usage {
-	print "Usage: ener [-h] [-s] [-r]"
+	print "usage: ener [-h] [-r] [-s]"
 }
 
 function launch_cmds {
