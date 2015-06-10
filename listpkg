@@ -1,6 +1,8 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ywstd.fr
 
+: "${EXT:=tgz}"
+
 if [[ $1 = "-h" ]]; then
 	print "usage: ${0##*/} [-h] [package_extension]"
 	exit
@@ -8,9 +10,9 @@ elif [[ -n $1 ]]; then
 	EXT="$1"
 fi
 
-WER=$(find . -type f -iname "*.${EXT:-tgz}" | wc -l)
+WER=$(find . -type f -iname "*.$EXT" | wc -l)
 if (( WER == 0 )); then
-	print "No package(s) found"
+	print "No package(s) found!"
 	exit
 fi
 
@@ -19,8 +21,8 @@ while true; do
 	print -n "Would you like to list these packages? [Y/n] "
 	read RESP
 	case $RESP in
-		[Yy]*) find . -type f -iname "*.${EXT:-tgz}" | while IFS=$'\n' read -r PKG; do 
-				DIRP="${PKG%/*}"; DIRP="${DIRP#*/}"; PKGN="${PKG##*/}"; print " $DIRP => $PKGN"; done | sort; exit ;;
+		[Yy]*) find . -type f -iname "*.${EXT}" | while IFS=$'\n' read -r PKG; do 
+				print -- "${PKG#*/}"; done | sort; exit ;;
 		[Nn]*) exit ;;
 		*) print -u2 "Please answer yes or no!" ;;
 	esac
