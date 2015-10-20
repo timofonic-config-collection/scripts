@@ -21,7 +21,7 @@ done
 shift $(( OPTIND - 1 ))
 
 if [[ ! -d $MLDIR ]]; then
-	print -u2 "ERROR: Directory is missing"
+	print -u2 "ERROR: $MLDIR is missing"
 	exit 1
 fi
 if [[ -n $SKIW ]] && (( SKIW < 1 || SKIW > 5 )); then
