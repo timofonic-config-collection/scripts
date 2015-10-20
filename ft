@@ -10,5 +10,4 @@ fi
 
 cd "$DFT"
 mkfontdir && xset fp rehash
-(( $? != 0 )) && print -u2 "An error occured"
 exit
