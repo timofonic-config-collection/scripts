@@ -11,7 +11,7 @@ fi
 
 if [[ -n $(whence -p curl) ]]; then
 	for f in "$@"; do
-		curl -OL --ipv4 -- "$f"
+		curl -fOL --ipv4 -- "$f"
 	done
 elif [[ -n $(whence -p wget) ]]; then
 	wget --inet4-only -- "$@"

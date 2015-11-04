@@ -1,7 +1,10 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ywstd.fr
 # IMPORTANT!!! Do not spam it, because you'll reach API Rate Limit and you'll be banned!
-# UNMAINTAINED
+
+####################
+### UNMAINTAINED ###
+####################
 
 if [[ $1 = "-h" ]]; then
 	print "Usage: gthsize [user] [repository]"

@@ -30,7 +30,7 @@ function test_user {
 }
 
 function test_chroot {
-	if [[ ! -f ${CHDEST}/etc/os-release ]]; then
+	if [[ ! -f ${CHDEST}/etc/passwd ]]; then
 		print -u2 "=> ERROR: chroot doesn't exist"
 		exit 1
 	fi
@@ -45,7 +45,8 @@ function create_chroot {
 		exit 1
 	fi
 	pacman -r "$CHDEST" -Syyuu bash bzip2 coreutils diffutils file filesystem findutils gawk \
-		gcc-libs gettext glibc grep gzip less logrotate pacman perl procps-ng psmisc sed shadow sysfsutils tar texinfo vi which
+		gcc-libs gettext glibc grep gzip less logrotate pacman perl procps-ng psmisc sed \
+		shadow sysfsutils tar texinfo vi which
 	RET=$?
 	if (( RET == 0 )); then
 		print "=> Packages succesfully installed"
@@ -99,7 +100,6 @@ function go_chroot {
 	cp /usr/share/terminfo/r/rxvt* ${CHDEST}/usr/share/terminfo/r/
 	[[ -f $AUTHF ]] && cp ${AUTHF} ${CHDEST}/root/.Xauthority
 	print "=> Starting chroot"
-	#CHUSER="ypntest"
 	chroot ${CHUSER:+--userspec="$CHUSER"} "$CHDEST" /bin/bash
 }
 

@@ -15,7 +15,7 @@ fi
 
 while true; do
 	if (( N > LIM )); then
-		print -u2 "You reached the limit ($LIM .${FEXT} files)"
+		print -u2 "You reached the limit (${LIM} .${FEXT} files)"
 		exit 1
 	fi
 	if [[ ! -f ${1}.${FEXT}.${N} ]]; then
