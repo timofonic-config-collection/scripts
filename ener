@@ -6,6 +6,7 @@ TIME=3
 
 function display_usage {
 	print "usage: ener [-h] [-r] [-s]"
+	exit
 }
 
 function launch_cmds {
@@ -15,7 +16,6 @@ function launch_cmds {
 
 if [[ -z $1 || $1 = "-h" ]]; then
 	display_usage
-	exit
 fi
 
 if [[ -n $DISPLAY ]]; then
@@ -36,7 +36,6 @@ case $1 in
 		;;
 	*)
 		display_usage
-		exit 1
 		;;
 esac
 

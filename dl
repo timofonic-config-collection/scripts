@@ -1,12 +1,9 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ywstd.fr
 
-if [[ $1 = "-h" ]]; then
-	print "usage: ${0##*/} [-h] [URL]"
+if [[ -z $1 || $1 = "-h" ]]; then
+	print "usage: ${0##*/} [URL]"
 	exit
-elif [[ -z $1 ]]; then
-	print -u2 "URL is missing"
-	exit 1
 fi
 
 if [[ -n $(whence -p curl) ]]; then

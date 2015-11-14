@@ -4,7 +4,7 @@
 KDIR="${HOME}/.yusr/xkb"
 
 if [[ $1 = "-h" ]]; then
-	print "usage: ${0##*/} [-h] [map]"
+	print "usage: ${0##*/} [MAP]"
 	exit
 elif [[ -n $1 ]]; then
 	if [[ ! -f ${KDIR}/${1}.xkb ]]; then
