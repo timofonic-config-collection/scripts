@@ -9,24 +9,27 @@ function usage {
 	print "usage: doosh [-d wad_directory] [-h] [-s skill_level]"
 }
 
+function p_err {
+	print -ru2 "$1"
+	exit 1
+}
+
 while getopts ":d:hs:" opt; do
-	case $opt in
+	case "$opt" in
 		d)  MLDIR="$OPTARG" ;;
-		h)  usage; exit 1   ;;
+		h)  usage; exit     ;;
 		s)  SKIW="$OPTARG"  ;;
-		:)  print -u2 "Option -$OPTARG needs an argument"; exit 1 ;;
-		\?) print -u2 "This option is invalid -$OPTARG"; exit 1   ;;
+		:)  p_err "Option -$OPTARG needs an argument" ;;
+		\?) p_err "This option is invalid -$OPTARG"   ;;
 	esac
 done
 shift $(( OPTIND - 1 ))
 
 if [[ ! -d $MLDIR ]]; then
-	print -u2 "ERROR: $MLDIR is missing"
-	exit 1
+	p_err "ERROR: $MLDIR is missing"
 fi
 if [[ -n $SKIW ]] && (( SKIW < 1 || SKIW > 5 )); then
-	print -u2 "ERROR: Wrong skill level"
-	exit 1
+	p_err "ERROR: Wrong skill level"
 fi
 
 PS3='Choose your Master Levels WAD: '
@@ -54,14 +57,14 @@ select NAMW in ATTACK BLACKTWR BLOODSEA CANYON CATWALK COMBINE FISTULA \
 		18) LVLW="01" ;;
 		19) LVLW="09" ;;
 		20) LVLW="03" ;;
-		*)  print -u2 "ERROR: Wrong number"; exit 1 ;;
+		*)  p_err "ERROR: Wrong number" ;;
 	esac
-	# We need to test if the filename exists (uppercase and lowercase). Can't use [[ -r ]] or [[ -f ]].
+	# We need to test if the filename exists (uppercase and lowercase).
 	if [[ -n $(find "$MLDIR" -type f -iname "${NAMW}.WAD") ]]; then
-		prboom -complevel 2 -iwad DOOM2.WAD -file "${MLDIR}/${NAMW}.WAD" -warp "$LVLW" -skill "${SKIW:-4}"
+		prboom -complevel 2 -iwad DOOM2.WAD -file "${MLDIR}/${NAMW}.WAD" \
+			-warp "$LVLW" -skill "${SKIW:-4}"
 		exit
 	else
-		print -u2 "ERROR: File is missing"
-		exit 1
+		p_err "ERROR: File is missing"
 	fi
 done
