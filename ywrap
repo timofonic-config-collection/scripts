@@ -1,6 +1,10 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ywstd.fr
 
+################
+# UNMAINTAINED #
+################
+
 CHDEST="/home/ypnose/Builds/ARCH-CHROOT"
 AUTHF="/home/ypnose/.Xauthority"
 
