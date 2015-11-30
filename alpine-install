@@ -1,0 +1,78 @@
+#!/bin/sh
+# Script by Ypnose - http://ywstd.fr
+# Inspired by 'http://wiki.alpinelinux.org/wiki/Installing_Alpine_Linux_in_a_chroot'
+
+# For a "normal" install: musl-utils syslinux util-linux
+# WIP
+set -e
+
+AL_NUMBER="3.2"
+AL_MIRROR="http://nl.alpinelinux.org/alpine/v${AL_NUMBER}"
+AL_APKTAR="apk-tools-static-2.6.3-r0.apk"
+AL_CHROOT="chroot"
+
+AL_HOSTNA="jeez"
+
+##############################
+
+# Get and extract apk-static
+if [ ! -e "${PWD}/${AL_APKTAR}" ]; then
+	curl -L -f -O "${AL_MIRROR}/main/x86_64/${AL_APKTAR}"
+fi
+tar -xvf "${PWD}/${AL_APKTAR}" "sbin/apk.static"
+
+# Install inside chroot
+mkdir -p "$AL_CHROOT"
+./sbin/apk.static -X "${AL_MIRROR}/main" -U --allow-untrusted --root \
+	"${AL_CHROOT}" --initdb add alpine-base syslinux
+
+##############################
+
+# APK
+mkdir -p "${AL_CHROOT}/etc/apk"
+cat >>"${AL_CHROOT}/etc/apk/repositories" <<-EOF
+	http://nl.alpinelinux.org/alpine/v${AL_NUMBER}/main
+	http://dl-5.alpinelinux.org/alpine/v${AL_NUMBER}/main
+EOF
+
+# TTY (3 ttys are enough)
+sed -i -e 's|^tty4|#tty4|g;s|^tty5|#tty5|g;s|^tty6|#tty6|g;' \
+	"${AL_CHROOT}/etc/inittab"
+
+##############################
+
+# Prepare the chroot...
+if [ -f "/etc/resolv.conf" ]; then
+	cp "/etc/resolv.conf" "${AL_CHROOT}/etc"
+fi
+
+mount -t proc proc "${AL_CHROOT}/proc"
+mount -t sysfs sys "${AL_CHROOT}/sys"
+mount -o bind /dev "${AL_CHROOT}/dev"
+
+# Run commands inside the chroot (added the scripts after checking them)
+chroot "${AL_CHROOT}" /bin/sh -l <<-EOF
+	setup-hostname jeez
+
+	rc-update add devfs sysinit
+	rc-update add dmesg sysinit
+	rc-update add mdev sysinit
+	rc-update add hwclock boot
+	rc-update add modules boot
+	rc-update add sysctl boot
+	rc-update add hostname boot
+	rc-update add bootmisc boot
+	rc-update add syslog boot
+	rc-update add mount-ro shutdown
+	rc-update add killprocs shutdown
+	rc-update add savecache shutdown
+EOF
+
+# Go inside
+chroot "${AL_CHROOT}" /bin/sh -l
+
+##############################
+
+umount "${AL_CHROOT}/dev" "${AL_CHROOT}/sys" "${AL_CHROOT}/proc"
+
+exit
