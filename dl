@@ -13,7 +13,7 @@ if [[ -n $(whence -p curl) ]]; then
 elif [[ -n $(whence -p wget) ]]; then
 	wget --inet4-only -- "$@"
 else
-	print -u2 "Unable to find curl / wget"
+	print -u2 "Unable to find curl or wget"
 	exit 1
 fi
 
