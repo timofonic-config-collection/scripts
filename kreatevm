@@ -1,0 +1,52 @@
+#!/bin/sh
+# Ypnose - http://ywstd.fr
+
+p_err() {
+	printf "%s\n" "$@" >&2
+	exit 1
+}
+
+usage() {
+	printf "%s\n" "usage: ${0##*/} [-b ISO] [-h] [-i IMG] [-m RAM]"
+	exit
+}
+
+if [ -z "$1" ]; then
+	usage
+fi
+
+while getopts ":b:hi:m:" opt; do
+	case $opt in
+		b) VM_ISO="$OPTARG" ;;
+		h) usage ;;
+		i) VM_IMG="$OPTARG" ;;
+		m) VM_RAM="$OPTARG" ;;
+		*) usage ;;
+	esac
+done
+shift $(( OPTIND - 1 ))
+
+if [ -z "$(grep 'kvm' /proc/modules)" ]; then
+	p_err "kvm module is not loaded!"
+fi
+
+qemu_launch() {
+	qemu-system-x86_64 -m "${VM_RAM:-512M}" -enable-kvm -vga std \
+		-drive file="$VM_IMG",format=raw "$@"
+}
+
+if [ ! -f "$VM_IMG" ]; then
+	p_err "$VM_IMG not found. You need to create it with qemu-img"
+fi
+
+if [ -n "$VM_ISO" ]; then
+	if [ ! -f "$VM_ISO" ]; then
+		p_err "$VM_ISO not found"
+	else
+		qemu_launch -cdrom "$VM_ISO" -boot order=d
+	fi
+else
+	qemu_launch
+fi
+
+exit
