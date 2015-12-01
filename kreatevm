@@ -26,6 +26,10 @@ while getopts ":b:hi:m:" opt; do
 done
 shift $(( OPTIND - 1 ))
 
+if [ "$#" -ne 0 ]; then
+	usage
+fi
+
 if [ -z "$(grep 'kvm' /proc/modules)" ]; then
 	p_err "kvm module is not loaded!"
 fi
