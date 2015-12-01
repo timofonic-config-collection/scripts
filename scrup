@@ -25,7 +25,7 @@ while IFS=$'\n' read -r SCR; do
 	fi
 	# Test if the new file isn't empty
 	if [[ -s $TPFILE ]]; then
-		cp "$TPFILE" "${PWD}/${SCR}"
+		cat "$TPFILE" >"${PWD}/${SCR}"
 		chmod +x "${PWD}/${SCR}"
 	fi
 done <"${PWD}/CHKLIST"
