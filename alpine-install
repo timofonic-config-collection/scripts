@@ -6,6 +6,7 @@
 # WIP
 set -e
 
+AL_FSDISK="$1"
 AL_NUMBER="3.2"
 AL_MIRROR="http://nl.alpinelinux.org/alpine/v${AL_NUMBER}"
 AL_APKTAR="apk-tools-static-2.6.3-r0.apk"
@@ -19,10 +20,16 @@ if [ "$(id -u)" -ne 0 ]; then
 	exit 1
 fi
 
+# 1 = / | 2 = swap | 3 = other
+if [ -z "$1" ]; then
+	printf "%s\n" "usage: ${0##*/} [DISK]"
+	exit
+fi
+
 # Get and extract apk-static
 if [ ! -e "${PWD}/${AL_APKTAR}" ]; then
-	curl -L -f -O "${AL_MIRROR}/main/x86_64/${AL_APKTAR}"
-	#wget "${AL_MIRROR}/main/x86_64/${AL_APKTAR}"
+	#curl -L -f -O "${AL_MIRROR}/main/x86_64/${AL_APKTAR}"
+	wget "${AL_MIRROR}/main/x86_64/${AL_APKTAR}"
 fi
 tar -xvf "${PWD}/${AL_APKTAR}" "sbin/apk.static"
 
