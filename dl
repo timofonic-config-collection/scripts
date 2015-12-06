@@ -11,7 +11,7 @@ if [[ -x $(whence -p curl) ]]; then
 		curl -fOL --ipv4 -- "$f"
 	done
 elif [[ -x $(whence -p wget) ]]; then
-	wget --inet4-only -- "$@"
+	wget -- "$@"
 else
 	print -u2 "Unable to find curl or wget"
 	exit 1
