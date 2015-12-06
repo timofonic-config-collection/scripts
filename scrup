@@ -17,7 +17,7 @@ fi
 while IFS=$'\n' read -r SCR; do
 	[[ -z $SCR || ${SCR:0:1} = "#" ]] && continue
 	# Replace shebang
-	wget -q --inet4-only -O - "${URLGIT}/${SCR}" \
+	wget -q -O - "${URLGIT}/${SCR}" \
 		| sed "1 s|/usr/bin/mksh$|${1:-/bin/mksh}|" >"$TPFILE"
 	# Test changes on existing file
 	if [[ -f ${PWD}/${SCR} && -z $(diff -q "${PWD}/${SCR}" "$TPFILE") ]]; then
