@@ -1,7 +1,7 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ywstd.fr
 
-if [[ -z $(whence -p xev) ]]; then
+if [[ ! -x $(whence -p xev) ]]; then
 	print -u2 "xev not found in the PATH"
 	exit 1
 fi

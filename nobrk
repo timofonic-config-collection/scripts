@@ -16,7 +16,7 @@ function pline(TYPE) {
 }
 
 # TRAILING SPACE(S)
-/[\t ]+$/ { 
+/[\t ]+$/ {
 	pline("TRAILING")
 	next
 }

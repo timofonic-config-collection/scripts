@@ -8,8 +8,7 @@ if [[ -z $1 || $1 = "-h" ]]; then
 	exit
 fi
 
-ip link show "$1" >/dev/null 2>&1
-if (( $? != 0 )); then
+if ! ip link show "$1" >/dev/null 2>&1; then
 	print -u2 -- "$1 does not exist"
 	exit 1
 fi

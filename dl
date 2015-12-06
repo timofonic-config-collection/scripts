@@ -6,11 +6,11 @@ if [[ -z $1 || $1 = "-h" ]]; then
 	exit
 fi
 
-if [[ -n $(whence -p curl) ]]; then
+if [[ -x $(whence -p curl) ]]; then
 	for f in "$@"; do
 		curl -fOL --ipv4 -- "$f"
 	done
-elif [[ -n $(whence -p wget) ]]; then
+elif [[ -x $(whence -p wget) ]]; then
 	wget --inet4-only -- "$@"
 else
 	print -u2 "Unable to find curl or wget"
