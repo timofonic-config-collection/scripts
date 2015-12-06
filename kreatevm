@@ -11,6 +11,11 @@ usage() {
 	exit
 }
 
+qemu_launch() {
+	qemu-system-x86_64 -m "${VM_RAM:-512M}" -enable-kvm -vga std \
+		-drive file="$VM_IMG",format=raw "$@"
+}
+
 if [ -z "$1" ]; then
 	usage
 fi
@@ -33,11 +38,6 @@ fi
 if [ -z "$(grep 'kvm' /proc/modules)" ]; then
 	p_err "kvm module is not loaded!"
 fi
-
-qemu_launch() {
-	qemu-system-x86_64 -m "${VM_RAM:-512M}" -enable-kvm -vga std \
-		-drive file="$VM_IMG",format=raw "$@"
-}
 
 if [ ! -f "$VM_IMG" ]; then
 	p_err "$VM_IMG not found. You need to create it with qemu-img"
