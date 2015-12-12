@@ -2,7 +2,6 @@
 # Script by Ypnose - http://ywstd.fr
 
 W_SCR="${0##*/}"
-W_CON="${HOME}/.yusr/conf/wpa_supplicant.conf"
 W_INF="wlan0"
 
 function p_err {
@@ -11,7 +10,7 @@ function p_err {
 }
 
 function usage {
-	print "usage: $W_SCR [-d] [-f WPA_FILE] [-h] [-i INTERFACE] [-r]"
+	print "usage: $W_SCR [-d] [-f WPA_FILE] [-h] [-i INTERFACE] [-n] [-r]"
 	exit
 }
 
@@ -22,7 +21,9 @@ function chk_inf {
 }
 
 function get_con {
-	if [[ ! -r $W_CON ]]; then
+	if [[ -z $W_CON ]]; then
+		p_err "wpa_supplicant configuration file is not specified"
+	elif [[ ! -r $W_CON ]]; then
 		p_err "$W_CON is missing or not readable"
 	fi
 	chk_inf
