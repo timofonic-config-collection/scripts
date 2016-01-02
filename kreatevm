@@ -1,5 +1,5 @@
 #!/bin/sh
-# Ypnose - http://ywstd.fr
+# Script by Ypnose - http://ywstd.fr
 
 p_err() {
 	printf "%s\n" "$@" >&2

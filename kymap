@@ -1,18 +1,19 @@
 #!/usr/bin/mksh
 # Script by Ypnose - http://ywstd.fr
 
-KDIR="${HOME}/.yusr/xkb"
+KM_DIR="${HOME}/.yusr/xkb"
+KM_MAP="${1:-kbyp}"
 
 if [[ $1 = "-h" ]]; then
 	print "usage: ${0##*/} [MAP]"
 	exit
-elif [[ -n $1 ]]; then
-	if [[ ! -f ${KDIR}/${1}.xkb ]]; then
-		print -u2 "Unable to find ${KDIR}/${1}.xkb map"
-		exit 1
-	fi
 fi
 
-xkbcomp -I"$KDIR" "${KDIR}/${1:-kbyp}.xkb" "$DISPLAY"
+if [[ ! -f ${KM_DIR}/${KM_MAP}.xkb ]]; then
+	print -u2 "Unable to find ${KM_DIR}/${KM_MAP}.xkb map"
+	exit 1
+fi
+
+xkbcomp -I"$KM_DIR" "${KM_DIR}/${KM_MAP}.xkb" "$DISPLAY"
 
 exit

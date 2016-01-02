@@ -10,4 +10,5 @@ fi
 
 cd "$DFT"
 mkfontdir && xset fp rehash
+
 exit

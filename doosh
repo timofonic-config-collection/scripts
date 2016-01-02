@@ -3,36 +3,37 @@
 # 4 Ultraviolent, 5 Nightmare. Previous skill levels are designed for milksops.
 # Make sure your DOOM2.WAD is in $HOME/.prboom(-plus)
 
-MLDIR="$HOME/Master_Levels"
-
 function usage {
-	print "usage: doosh [-d wad_directory] [-h] [-s skill_level]"
+	print "usage: doosh [-d WAD DIRECTORY] [-h] [-s SKILL LVL]"
+	exit
 }
 
 function p_err {
-	print -ru2 "$1"
+	print -ru2 "ERROR: $1"
 	exit 1
 }
 
-while getopts ":d:hs:" opt; do
+while getopts "d:hs:" opt; do
 	case "$opt" in
-		d)  MLDIR="$OPTARG" ;;
-		h)  usage; exit     ;;
-		s)  SKIW="$OPTARG"  ;;
-		:)  p_err "Option -$OPTARG needs an argument" ;;
-		\?) p_err "This option is invalid -$OPTARG"   ;;
+		d) MLDIR="$OPTARG" ;;
+		h) usage           ;;
+		s) SKIW="$OPTARG"  ;;
+		*) usage           ;;
 	esac
 done
 shift $(( OPTIND - 1 ))
 
-if [[ ! -d $MLDIR ]]; then
-	p_err "ERROR: $MLDIR is missing"
-fi
-if [[ -n $SKIW ]] && (( SKIW < 1 || SKIW > 5 )); then
-	p_err "ERROR: Wrong skill level"
+if [[ -z $MLDIR ]]; then
+	p_err "WAD directory not specified"
+elif [[ ! -d $MLDIR ]]; then
+	p_err "$MLDIR is missing"
 fi
 
-PS3='Choose your Master Levels WAD: '
+if [[ -n $SKIW ]] && (( SKIW < 1 || SKIW > 5 )); then
+	p_err "Wrong skill level"
+fi
+
+PS3='Choose the Master Levels WAD: '
 select NAMW in ATTACK BLACKTWR BLOODSEA CANYON CATWALK COMBINE FISTULA \
 	GARRISON GERYON MANOR MEPHISTO MINOS NESSUS PARADOX SUBSPACE SUBTERRA \
 	TEETH TTRAP VESPERAS VIRGIL; do
@@ -57,14 +58,14 @@ select NAMW in ATTACK BLACKTWR BLOODSEA CANYON CATWALK COMBINE FISTULA \
 		18) LVLW="01" ;;
 		19) LVLW="09" ;;
 		20) LVLW="03" ;;
-		*)  p_err "ERROR: Wrong number" ;;
+		*)  p_err "Wrong number" ;;
 	esac
-	# We need to test if the filename exists (uppercase and lowercase).
-	if [[ -n $(find "$MLDIR" -type f -iname "${NAMW}.WAD") ]]; then
+	if [[ -f "${MLDIR}/${NAMW}.WAD" ]]; then
 		prboom -complevel 2 -iwad DOOM2.WAD -file "${MLDIR}/${NAMW}.WAD" \
 			-warp "$LVLW" -skill "${SKIW:-4}"
-		exit
 	else
-		p_err "ERROR: File is missing"
+		p_err "${NAMW}.WAD is missing in $MLDIR"
 	fi
 done
+
+exit
