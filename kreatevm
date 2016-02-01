@@ -1,31 +1,33 @@
 #!/bin/sh
 # Script by Ypnose - http://ywstd.fr
 
-p_err() {
-	printf "%s\n" "$@" >&2
-	exit 1
+usage() {
+	printf "%s\n" "usage: ${0##*/} [-b ISO] [-h] [-i IMG] [-m RAM] [-p PORT]"
+	exit
 }
 
-usage() {
-	printf "%s\n" "usage: ${0##*/} [-b ISO] [-h] [-i IMG] [-m RAM]"
-	exit
+p_err() {
+	printf "%s\n" "$1" >&2
+	exit 1
 }
 
 qemu_launch() {
 	qemu-system-x86_64 -m "${VM_RAM:-512M}" -enable-kvm -vga std \
-		-drive file="$VM_IMG",format=raw "$@"
+		-drive file="$VM_IMG",format=raw -net nic \
+		-net user,hostfwd=tcp::"${VM_PRT:-9922}"-:22 "$@"
 }
 
 if [ -z "$1" ]; then
 	usage
 fi
 
-while getopts ":b:hi:m:" opt; do
+while getopts ":b:hi:m:p:" opt; do
 	case $opt in
 		b) VM_ISO="$OPTARG" ;;
 		h) usage ;;
 		i) VM_IMG="$OPTARG" ;;
 		m) VM_RAM="$OPTARG" ;;
+		p) VM_PRT="$OPTARG" ;;
 		*) usage ;;
 	esac
 done
@@ -35,12 +37,14 @@ if [ "$#" -ne 0 ]; then
 	usage
 fi
 
-if [ -z "$(grep 'kvm' /proc/modules)" ]; then
-	p_err "kvm module is not loaded!"
+if [ -z "$VM_IMG" ]; then
+	p_err "Image not specified"
+elif [ ! -f "$VM_IMG" ]; then
+	p_err "$VM_IMG not found. You need to create it with qemu-img"
 fi
 
-if [ ! -f "$VM_IMG" ]; then
-	p_err "$VM_IMG not found. You need to create it with qemu-img"
+if ! grep -q 'kvm' /proc/modules; then
+	p_err "kvm module is not loaded!"
 fi
 
 if [ -n "$VM_ISO" ]; then
