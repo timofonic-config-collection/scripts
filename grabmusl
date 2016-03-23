@@ -3,12 +3,24 @@
 set -e
 
 REQ_MUSL="1.1.14"
-REQ_KERN="4.4.2"
+REQ_KERN="4.4.6"
 REQ_DEST="${PWD}/musl-cc"
+
+####################
+
+get_arc() {
+	if [ -x "$(command -v curl)" ]; then
+		curl -fOL "$1"
+	elif [ -x "$(command -v wget)" ]; then
+		wget "$1"
+	fi
+}
+
+####################
 
 # Compile and install musl
 if [ ! -e "${PWD}/musl-${REQ_MUSL}.tar.gz" ]; then
-	wget "http://www.musl-libc.org/releases/musl-${REQ_MUSL}.tar.gz"
+	get_arc "http://www.musl-libc.org/releases/musl-${REQ_MUSL}.tar.gz"
 fi
 tar -zxf "${PWD}/musl-${REQ_MUSL}.tar.gz"
 (
@@ -26,7 +38,7 @@ rm -r "${PWD}/musl-${REQ_MUSL}"
 
 # Install kernel headers
 if [ ! -e "${PWD}/linux-${REQ_KERN}.tar.xz" ]; then
-	wget "https://cdn.kernel.org/pub/linux/kernel/v${REQ_KERN%%.*}.x/linux-${REQ_KERN}.tar.xz"
+	get_arc "https://cdn.kernel.org/pub/linux/kernel/v${REQ_KERN%%.*}.x/linux-${REQ_KERN}.tar.xz"
 fi
 tar -Jxf "${PWD}/linux-${REQ_KERN}.tar.xz"
 (
