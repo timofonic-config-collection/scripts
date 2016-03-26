@@ -1,45 +1,50 @@
 #!/bin/sh
 # Script by Ypnose - http://ywstd.fr
 # Inspired by 'http://wiki.alpinelinux.org/wiki/Installing_Alpine_Linux_in_a_chroot'
-
-# For a "normal" install: musl-utils syslinux util-linux
-# WIP
+# fdisk(8) and mkfs(8) will be directly done by the users
 set -e
 
-AL_FSDISK="$1"
-AL_NUMBER="3.2"
+AL_DEDISK="$1"
+AL_NUMBER="3.3"
 AL_MIRROR="http://nl.alpinelinux.org/alpine/v${AL_NUMBER}"
-AL_APKTAR="apk-tools-static-2.6.3-r0.apk"
+AL_APKTAR="apk-tools-static-2.6.5-r1.apk"
 AL_CHROOT="${AL_CHROOT:-syschroot}"
-AL_HOSTNA="${AL_HOSTNA:-alpinebox}"
+AL_HOSTNA="${AL_HOSTNA:-alpineserv}"
 
 ##############################
+
+# 1 = / | 2 = swap | 3 = other
+if [ -z "$1" ] || [ "$1" = "-h" ]; then
+	printf "%s\n" "usage: ${0##*/} [DISK]"
+	exit
+fi
 
 if [ "$(id -u)" -ne 0 ]; then
 	printf "%s\n" "${0##*/} needs to be called as root" >&2
 	exit 1
 fi
 
-# 1 = / | 2 = swap | 3 = other
-if [ -z "$1" ]; then
-	printf "%s\n" "usage: ${0##*/} [DISK]"
-	exit
+# Verify destination filesystem is mounted
+if [ ! -d "$AL_CHROOT" ]; then
+	printf "%s\n" "$AL_CHROOT directory is missing" >&2
+	exit 1
+elif ! mount | grep -q "^/dev/${AL_DEDISK}1"; then
+	printf "%s\n" "/dev/${AL_DEDISK}1 is not mounted inside $AL_CHROOT" >&2
+	exit 1
 fi
 
 # Get and extract apk-static
 if [ ! -e "${PWD}/${AL_APKTAR}" ]; then
-	#curl -L -f -O "${AL_MIRROR}/main/x86_64/${AL_APKTAR}"
-	wget "${AL_MIRROR}/main/x86_64/${AL_APKTAR}"
+	busybox wget "${AL_MIRROR}/main/x86_64/${AL_APKTAR}"
 fi
 tar -xvf "${PWD}/${AL_APKTAR}" "sbin/apk.static"
 
 # Install inside chroot
 mkdir -p "$AL_CHROOT"
 ./sbin/apk.static -X "${AL_MIRROR}/main" -U --allow-untrusted --root \
-	"${AL_CHROOT}" --initdb add alpine-base syslinux
+	"${AL_CHROOT}" --initdb add alpine-base e2fsprogs syslinux
 
 ##############################
-## Modify /etc/hosts?
 
 # APK
 mkdir -p "${AL_CHROOT}/etc/apk"
@@ -52,19 +57,31 @@ EOF
 sed -i -e 's|^tty4|#tty4|g;s|^tty5|#tty5|g;s|^tty6|#tty6|g;' \
 	"${AL_CHROOT}/etc/inittab"
 
-# Loopback interface (current done by loopback initscript)
-#mkdir -p "${AL_CHROOT}/etc/network"
-#cat >"${AL_CHROOT}/etc/network/interfaces" <<-EOF
-#	# The loopback network interface
-#	auto lo
-#	iface lo inet loopback
-#EOF
+# Loopback interface
+mkdir -p "${AL_CHROOT}/etc/network"
+cat >"${AL_CHROOT}/etc/network/interfaces" <<-EOF
+	# The loopback network interface
+	auto lo
+	iface lo inet loopback
+
+	# Static IPv4 example on eth0
+	# auto eth0
+	# iface eth0 inet static
+	#	address 192.168.10.20
+	#	netmask 255.255.255.0
+	#	gateway 192.168.10.1
+EOF
+
+# /etc/fstab
+AL_DEUUID="$(lsblk -no UUID /dev/${AL_DEDISK}1)"
+printf "%s\n" "UUID=${AL_DEUUID} / ext4 defaults,rw 0 1" >"${AL_CHROOT}/etc/fstab"
 
 # HISTFILE
 printf "\n%s\n" "unset HISTFILE" >>"${AL_CHROOT}/etc/profile"
 
 # Syslinux + initramfs
 sed -i -e 's|^modules=.*|modules=sd-mod,usb-storage,ext4|g' \
+	-e "s|^root=|root=UUID=${AL_DEUUID}|g" \
 	"${AL_CHROOT}/etc/update-extlinux.conf"
 printf "%s\n" 'features="ata base ide scsi usb virtio ext4"' \
 	>"${AL_CHROOT}/etc/mkinitfs/mkinitfs.conf"
@@ -83,21 +100,23 @@ mount -o bind /dev "${AL_CHROOT}/dev"
 # Run commands inside the chroot (added the scripts after checking them)
 # For local.d at startup, put .start as the script extension
 chroot "${AL_CHROOT}" /bin/sh -l <<-EOF
-	setup-hostname ${AL_HOSTNA}
+	setup-hostname $AL_HOSTNA
 	setup-keymap uk
 	setup-timezone -z Europe/Paris
 
 	rc-update add bootmisc boot
 	rc-update add fsck boot
 	rc-update add hostname boot
+	rc-update add hwclock boot
 	rc-update add local boot
-	rc-update add loopback boot
 	rc-update add modules boot
+	rc-update add networking boot
 	rc-update add swap boot
 	rc-update add syslog boot
 	rc-update add urandom boot
 
 	rc-update add acpid default
+	rc-update add cron default
 
 	rc-update add killprocs shutdown
 	rc-update add mount-ro shutdown
@@ -108,13 +127,15 @@ chroot "${AL_CHROOT}" /bin/sh -l <<-EOF
 	rc-update add hwdrivers sysinit
 	rc-update add mdev sysinit
 
-	apk update
+	dd if=/usr/share/syslinux/mbr.bin of=/dev/${AL_DEDISK}
 
-	printf "\n%s\n\n" "Now setup the fstab, define the root password, \
-modify update-extlinux.conf and install a kernel"
+	apk update
 EOF
 
-# Go inside and do your business
+printf "\n%s\n\n" "Verify the fstab, define the root password, \
+verify update-extlinux.conf and install a kernel"
+
+# Go inside and do your business...
 chroot "${AL_CHROOT}" /bin/sh -l
 
 ##############################
