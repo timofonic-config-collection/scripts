@@ -35,7 +35,7 @@ fi
 
 # Get and extract apk-static
 if [ ! -e "${PWD}/${AL_APKTAR}" ]; then
-	busybox wget "${AL_MIRROR}/main/x86_64/${AL_APKTAR}"
+	wget "${AL_MIRROR}/main/x86_64/${AL_APKTAR}"
 fi
 tar -xvf "${PWD}/${AL_APKTAR}" "sbin/apk.static"
 
