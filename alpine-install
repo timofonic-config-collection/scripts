@@ -64,8 +64,8 @@ cat >"${AL_CHROOT}/etc/network/interfaces" <<-EOF
 	iface lo inet loopback
 
 	# Static IPv4 example on eth0
-	# auto eth0
-	# iface eth0 inet static
+	#auto eth0
+	#iface eth0 inet static
 	#	address 192.168.10.20
 	#	netmask 255.255.255.0
 	#	gateway 192.168.10.1
