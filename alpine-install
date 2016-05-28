@@ -40,7 +40,6 @@ fi
 tar -xvf "${PWD}/${AL_APKTAR}" "sbin/apk.static"
 
 # Install inside chroot
-mkdir -p "$AL_CHROOT"
 ./sbin/apk.static -X "${AL_MIRROR}/main" -U --allow-untrusted --root \
 	"${AL_CHROOT}" --initdb add alpine-base e2fsprogs syslinux
 
