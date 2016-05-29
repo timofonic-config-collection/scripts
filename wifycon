@@ -79,6 +79,7 @@ fi
 
 if (( W_RES == 1 )); then
 	end_con
+	sleep 3
 	get_con
 elif (( W_DIS == 1 )); then
 	end_con
